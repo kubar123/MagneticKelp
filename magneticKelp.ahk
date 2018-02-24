@@ -71,7 +71,7 @@ makeMainWindow(){
 		;______________________SETTINGS WINDOW ________________________
 makeSettingsWindow(){
 	global
-	Gui 3:-MinimizeBox -MaximizeBox
+	Gui 3:-MinimizeBox -MaximizeBox +AlwaysOnTop 
 	Gui 3:Add, Button, gBtnSettingsCancel x256 y368 w80 h23, Cancel
 	Gui 3:Add, Button, gBtnSettingsOk x168 y368 w80 h23, &OK
 	Gui 3:Add, Tab3, x8 y8 w336 h359, Behavior||Software
