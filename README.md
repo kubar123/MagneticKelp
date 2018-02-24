@@ -1,6 +1,10 @@
 # MagneticKelp
+
+<img align="right" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/three.PNG"/>
+
 MagneticKelp is a torrent client manager for windows. It helps with streaming, or downloading a file when you have multiple torrenting clients installed.
-Torrent client manager for Windows
+
+![Main Window](https://github.com/kubar123/MagneticKelp/blob/master/Img/Two.PNG) 
 
 Install directory:
 ```
@@ -8,9 +12,10 @@ Install directory:
 ```
 <hr>
 
+
 ## Install
 ### MagneticKelp
-*Download* the latest .exe file from the '*Releases*' folder, or download the *source* code and *compile* using AutoHotKey. 
+*Download* the latest .exe file from the '*Releases*' Tab above, or download the *source* code and *compile* using AutoHotKey. 
 
 ### Use MagneticKelp for magnet links
 1. Open settings
