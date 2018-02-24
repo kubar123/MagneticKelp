@@ -45,4 +45,15 @@ npm install -g peerflix
 ## Features
 * Drag and drop a .torrent file into the main window to start streaming
 * Easily select which program to download/stream content with
-* Re-uses the previous CMD window if possible, using peerflix
+
+<hr>
+
+## Help
+<Table>
+  <tr><td>List Files</td><td> Enable if the torrent has multiple files, select the file you wish to stream in the command window with the arrow keys and enter</td></tr>
+  <tr><td>Reuse Command Prompt when possible</td><td>Attempts to reuse the old command prompt window if still open, otherwise opens a new window.</td></tr>
+  <tr><td>Open on monitor</td><td>Opens the application to the center of the monitor.</td></tr>
+  </table>
+  
+ ### Troubleshooting
+  * Open magneticKelp, open the settings (top right) and click the 'associate magnet links'. Click on any magnet link and magneticKelp should open
