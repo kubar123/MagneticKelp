@@ -1,6 +1,6 @@
 ﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
-#SingleInstance
+#SingleInstance force
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
@@ -24,7 +24,6 @@ makeMainWindow()
 firstTimeCheck()				
 populateFromFile()
 
-firstTimeCheck()
 ; IfNotExist, %IniLocation%
 ; 	makeIniFile()
 
@@ -349,22 +348,7 @@ return
 
 ; Assign magnet links as default
 BtnAssMagnet:
-; ----------------- Current user -------------
-	RegWrite,REG_SZ,HKEY_CURRENT_USER,Software\Classes\magnet,,URL:Magnet link
-	RegWrite,REG_SZ,HKEY_CURRENT_USER,Software\Classes\magnet,Content Type,application/x-magnet
-	RegWrite,REG_SZ,HKEY_CURRENT_USER,Software\Classes\magnet\shell,,open
-
-	RegWrite,REG_SZ,HKEY_CURRENT_USER,magnet\shell\open\command,,"%A_AppData%\MagneticKelp\magneticKelp.exe" "`%1"
-
-; ----------------- classes Root -------------
-	RegWrite,REG_SZ,HKEY_CLASSES_ROOT,magnet,,URL:Magnet link
-	RegWrite,REG_SZ,HKEY_CLASSES_ROOT,magnet,Content Type,application/x-magnet
-	RegWrite,REG_SZ,HKEY_CLASSES_ROOT,magnet\shell,,open
-
-	RegWrite,REG_SZ,HKEY_CLASSES_ROOT,magnet\shell\open\command,,"%A_AppData%\MagneticKelp\magneticKelp.exe" "`%1"
-;--------copy files ---------
-	FileCreateDir, %A_AppData%\MagneticKelp
-	FileCopy, %A_ScriptFullPath%,%A_AppData%\MagneticKelp\magneticKelp.exe,1
+	assignMagnetLink()
 
 return
 
@@ -487,16 +471,42 @@ makeIniFile(){
 	;IniWrite,--,%IniLocation%,programLocation,bittorrent
 	;IniWrite,--,%IniLocation%,programLocation,popcorntime
 }
+assignMagnetLink(){
+	; ----------------- Current user -------------
+	RegWrite,REG_SZ,HKEY_CURRENT_USER,Software\Classes\magnet,,URL:Magnet link
+	RegWrite,REG_SZ,HKEY_CURRENT_USER,Software\Classes\magnet,Content Type,application/x-magnet
+	RegWrite,REG_SZ,HKEY_CURRENT_USER,Software\Classes\magnet\shell,,open
 
+	RegWrite,REG_SZ,HKEY_CURRENT_USER,magnet\shell\open\command,,"%A_AppData%\MagneticKelp\magneticKelp.exe" "`%1"
+
+; ----------------- classes Root -------------
+	RegWrite,REG_SZ,HKEY_CLASSES_ROOT,magnet,,URL:Magnet link
+	RegWrite,REG_SZ,HKEY_CLASSES_ROOT,magnet,Content Type,application/x-magnet
+	RegWrite,REG_SZ,HKEY_CLASSES_ROOT,magnet\shell,,open
+
+	RegWrite,REG_SZ,HKEY_CLASSES_ROOT,magnet\shell\open\command,,"%A_AppData%\MagneticKelp\magneticKelp.exe" "`%1"
+;--------copy files ---------
+	FileCreateDir, %A_AppData%\MagneticKelp
+	FileCopy, %A_ScriptFullPath%,%A_AppData%\MagneticKelp\magneticKelp.exe,1
+}
 
 firstTimeCheck(){
 	Global
 	;MsgBox, %location%
 	IfNotExist, %IniLocation%
-    	makeIniFile()
+		notFirstTime()
+    	
 	
 }
+notFirstTime(){
 
+	makeIniFile()
+	Msgbox, 262180,, This appears to be your first time running this application. Set MagneticKelp to be the default application for magnet links?
+	IfMsgBox No
+		return
+	ifMsgBox Yes
+		assignMagnetLink()
+}
 
 ;## Opens CMD window and starts peerflix 
 ;## magnet link, stream with (eg --potplayer / --vlc), Show list of files? (streaming multi )
