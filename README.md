@@ -18,7 +18,7 @@ Install directory:
 1. Click the releases tab above 
 <img align="center" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/install-releases.png" />
 2. Click the 'MagneticKelp.exe' link under 'Assets'
-<img align="center" src="https://gihub.com/kubar123/MagneticKelp/blobl/master/Img/install-exe.png" />
+<img align="center" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/install-exe.png" />
 
 ### Use MagneticKelp for magnet links
 1. Open settings (top right cog wheel)
