@@ -71,8 +71,13 @@ makeMainWindow(){
 	html:="<html onContextMenu='return false;' ><head onContextMenu='return false;'>"
 	html.="<style>body{ margin: 0; padding: 0; background-color:#f1f1f1; height:100%; overflow:hidden; filter:alpha(opacity=60); border-style:dashed; border-width:1px; }, "
 	html.="div { padding-top:4px; height:100%; overflow:hidden; font-family: 'Kalam'; -ms-user-select: none; cursor:default; text-align: center;  }</style>"
-	html.="</head><body><div unselectable='on' onContextMenu='return false;'>Drop magnet links here"
+	html.="</head><body><div id='mainText' unselectable='on' onContextMenu='return false;'>"
 	;html.="<div onContentMenu='return false;'><img onContentMenu='return false;' width='300' height='60' src='D:\OneDrive\git\MagneticKelp\download.png'/>"
+	if(%1% =="")
+		html.="Drop magnet links here"
+	else 
+		html.="Magnet Loaded"
+	
 	html.="</div></body></html>"
 	wb.document.write(html)
 	;----END HTML
@@ -261,7 +266,9 @@ GuiDropFiles:
 	Gui, 1:Hide
 	Sleep 50
 	Gui, 1:Show
-
+	html.="<script>document.getElementById('mainText').innerHTML='Torrent loaded';</script>"
+ 	html.="<style>body {border-color:#0080ff; border-width: 2px;}</style>"
+	wb.document.write(html)
 	return
 
 
@@ -474,6 +481,9 @@ IE_BeforeNavigate2(p*) {
  	Gui 1:Hide
  	sleep, 50
  	Gui 1:Show
+ 	html.="<script>document.getElementById('mainText').innerHTML='Torrent loaded';</script>"
+ 	html.="<style>body {border-color:#0080ff; border-width: 2px;}</style>"
+	wb.document.write(html)
 
 }
 
