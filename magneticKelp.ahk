@@ -11,7 +11,7 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;=========================================== GLOBAL SETTINGS ============================
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
-
+PROGRAM_VERSION=0.2.1
 
 
 ;==============================================	/END GLOBAL ==============================
@@ -477,6 +477,7 @@ makeIniFile(){
 	;--------Selected By default ---------------------
 	IniWrite,vlc,%IniLocation%,Defaults,DefaultStreamer
 	iniWrite,qbittorrent ,%IniLocation%,Defaults,defaultDownloader
+	IniWrite,%PROGRAM_VERSION%,%IniLocation%,Defaults,LastVersionRan
 
 	;-----------Desktop ------------------------------
 	IniWrite,1,%IniLocation%,Defaults,reuseCmd
@@ -519,7 +520,15 @@ firstTimeCheck(){
 	;MsgBox, %location%
 	IfNotExist, %IniLocation%
 		notFirstTime()
-    	
+    ;check if program is up to date
+    IniRead, lastVerRan, %IniLocation%, Defaults, LastVersionRan
+    if(lastVerRan < PROGRAM_VERSION){
+    	MsgBox,64,,You are running a new version of the application.`nMagneticKelp has been updated.
+		IniWrite,%PROGRAM_VERSION%,%IniLocation%,Defaults,LastVersionRan
+		FileCopy, %A_ScriptFullPath%,%A_AppData%\MagneticKelp\magneticKelp.exe,1
+
+    }
+
 	
 }
 
