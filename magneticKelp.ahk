@@ -11,13 +11,15 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;=========================================== GLOBAL SETTINGS ============================
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
-PROGRAM_VERSION=0.2.1
+ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
+PROGRAM_VERSION=0.2.0
 
 
 ;==============================================	/END GLOBAL ==============================
 
 ;---------------------------------- 	MAIN 	-------------------
 makeMainWindow()
+;checkForNewVersions()
 
 firstTimeCheck()	
 
@@ -717,7 +719,51 @@ addShortcutsToStartMenu(){
 
 }
 
+checkForNewVersions(){
+	Global
+	;https://github.com/kubar123/MagneticKelp/blob/master/README.md
+	whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+	whr.open("GET","https://github.com/kubar123/MagneticKelp/tags",true)
+	whr.Send()
+	whr.waitForResponse()
+	info:=whr.ResponseText
+	;MsgBox %info%
+	foundPos:= inStr(info, "tag-name")
+	if(!foundPos)
+	MsgBox Not found
+	Else
+	;msgbox found at: %foundPos%
+	versionInfo:=SubStr(info,foundPos,19)
 
+	;Msgbox % versionInfo
+	vFoundPos:=inStr(versionInfo,"v")
+	endFoundPos:=inStr(versionInfo,"<")
+	versionLength:=endFoundPos-vFoundPos
+
+	;version information:
+	numericalVersion:= subStr(versionInfo,vFoundPos+1,versionLength-1)
+
+	MsgBox % "Newest version: " numericalVersion
+
+	if(PROGRAM_VERSION<numericalVersion){
+		Msgbox,36,, New version available, update now?
+		IfMsgBox Yes
+			newVersionUpdater(numericalVersion)
+		IfMsgBox No
+			msgbox Not downloading the file...
+	}if(PROGRAM_VERSION>=numericalVersion){
+		;MsgBox No new versions
+		return 0
+	}
+
+	;return PROGRAM_VERSION>=
+}
+
+newVersionUpdater(versionToDownload=0){
+	UrlLocation=https://github.com/kubar123/MagneticKelp/releases/download/v%versionToDownload%/magneticKelp.exe
+	MsgBox %UrlLocation%
+	UrlDownloadToFile, %UrlLocation%,%ExeLocation%
+}
 ;==================================================================================================================================
 ;----------------------------------------------------------------------------------------------------------------------------------
 ;==================================================================================================================================
