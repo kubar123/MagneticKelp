@@ -3,8 +3,6 @@
 #SingleInstance force
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-
-
 MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;Menu Tray, Icon, C:\Users\Admin\Pictures\favicon.ico 			;tray icon - optional
 
@@ -21,7 +19,8 @@ IniLocation= %A_AppData%\magneticKelp\settings.ini
 ;---------------------------------- 	MAIN 	-------------------
 makeMainWindow()
 
-firstTimeCheck()				
+firstTimeCheck()	
+
 populateFromFile()
 
 ; IfNotExist, %IniLocation%
@@ -40,8 +39,6 @@ return
 		;__________________________MAIN WINDOW_________________________
 makeMainWindow(){
 	global
-
-	;Menu Tray, Icon, C:\Users\Admin\Pictures\favicon.ico
 
 	Gui 1:-MinimizeBox -MaximizeBox +AlwaysOnTop
 	Gui 1:Add, Button, Default gStreamButton x40 y56 w89 h23, Stream
@@ -63,16 +60,19 @@ makeMainWindow(){
 	Gui 1:Add, ActiveX, x10 y91 w280 h30 vwb, Shell.Explorer
 	
 
+;---------Drag and drop files -----------
 	;Active X information---------
-	wb.silent:=true
+	wb.silent:=True 	;no 'script error' warnings
 
 	wb.Navigate("about:tabs")
+
 	;-----HTML-------
 	html:="<html onContextMenu='return false;' ><head onContextMenu='return false;'>"
 	html.="<style>body{ margin: 0; padding: 0; background-color:#f1f1f1; height:100%; overflow:hidden; filter:alpha(opacity=60); border-style:dashed; border-width:1px; }, "
 	html.="div { padding-top:4px; height:100%; overflow:hidden; font-family: 'Kalam'; -ms-user-select: none; cursor:default; text-align: center;  }</style>"
 	html.="</head><body><div id='mainText' unselectable='on' onContextMenu='return false;'>"
 	;html.="<div onContentMenu='return false;'><img onContentMenu='return false;' width='300' height='60' src='D:\OneDrive\git\MagneticKelp\download.png'/>"
+	;check to see if magnet link is already loaded
 	if(%1% =="")
 		html.="Drop magnet links here"
 	else 
@@ -84,11 +84,11 @@ makeMainWindow(){
 	ComObjConnect(wb, "IE_")
 
 
-
+;----- Check hover -------
 	MyWindowID := WinExist()
 	SetTimer, CheckHover, 900
 	Process,Exist
-
+;-------------------------
 	
 	Gui 1:Show, w320 h124 x-500 y-500, MagneticKelp
 
@@ -148,7 +148,7 @@ makeSettingsWindow(){
 	Gui 3:Show, x-500 y-500 w356 h396, Settings
 }
 
-
+;____________________CUSTOM Stream Button _______________________
 
 makeStreamCustomWindow(){
 	global 
@@ -176,6 +176,7 @@ ExitApp
 
 
 
+;TODO remove when features working
 betaFeatureDisable(){
 	 GuiControl,Disable, Button8
 	 ;GuiControl,Disable, Button7
@@ -236,12 +237,6 @@ CheckHover:
 				ToolTip, Custom peerflix, %varX%, %varY%
 				return
 			}
-
-		  ;else
-		;  if (windowID = MyWindowID) && (controlID = Button2hwnd){
-		;    ToolTip, over Button2
-		;  	return
-		;  }
 		}
 	}
 ;---------- end of check, display no tooltip
@@ -259,16 +254,8 @@ CheckHover:
 
 ; ----------Drag and drop file ------------
 GuiDropFiles:
-	;MsgBox, %A_GuiEvent%
-	;makeMainWindow()
-	;MsgBox %1%
 	1=%A_GuiEvent%
-	Gui, 1:Hide
-	Sleep 50
-	Gui, 1:Show
-	html.="<script>document.getElementById('mainText').innerHTML='Torrent loaded';</script>"
- 	html.="<style>body {border-color:#0080ff; border-width: 2px;}</style>"
-	wb.document.write(html)
+	animateTorrentLoaded()
 	return
 
 
@@ -279,7 +266,8 @@ BtnStreamCustom:
 	makeStreamCustomWindow()
 	Return 		;waiting on submit button
 
-		;Peerflix Custom Ok button
+
+;------------ Stream Custom 'ok' Button ----
 BtnStreamCustomGo:
 	Gui, 2:Submit
 	mainLink = %1%
@@ -288,7 +276,7 @@ BtnStreamCustomGo:
 	ExitApp, 1
 
 
-;------------- Main Window ------------------
+;------------- Main Window -----------------
 BtnSettings:
 ;global StreamWit
 	gui,1:hide
@@ -298,6 +286,7 @@ BtnSettings:
 	return
 
 
+;----------- Stream button ----------------
 StreamButton:
 	Gui, 1:Submit, NoHide
 	Gui, 1:Destroy
@@ -307,31 +296,31 @@ StreamButton:
 	ExitApp
 
 
+;--------- Download Button ---------------
 btnDownload:
 	Gui, 1:Submit, NoHide
 	
 	;find which dropdown is selected
-	;MsgBox %DownloadWith%
-	;MsgBox hello
 	if(DownloadWith = "QbitTorrent"){
-		IniRead, OutputVar, %IniLocation%, programLocation, qbittorrent
-		
+		IniRead, progLocation, %IniLocation%, programLocation, qbittorrent
 	}
 	else if(DownloadWith = "μTorrent"){
-		IniRead, OutputVar, %IniLocation%, programLocation, uTorrent
+		IniRead, progLocation, %IniLocation%, programLocation, uTorrent
 	}else if(DownloadWith = "Deluge"){
-		IniRead, OutputVar, %IniLocation%, programLocation, deluge
+		IniRead, progLocation, %IniLocation%, programLocation, deluge
 	}else if(DownloadWith = "Bittorrent"){
-		IniRead, OutputVar, %IniLocation%, programLocation, Bittorrent
+		IniRead, progLocation, %IniLocation%, programLocation, Bittorrent
 	}
 
 	else{
 		MsgBox Uhh... [DL BTN-SelectionOutOfBounds] Error
 		ExitApp
 	}
-	Run %OutputVar% "%1%"
+	Run %progLocation% "%1%"
 	
 	ExitApp
+
+
 
 ;----------- Popcorntime -------------------
 BtnPopcorntime:
@@ -340,7 +329,7 @@ BtnPopcorntime:
 
 
 
-;--------------------Settings -----------------
+;----------------------------Settings -------------------------------
 ;Assign .torrent files as default
 BtnAssTorrent:
 		;TODO A lot of stuff... ...
@@ -377,8 +366,7 @@ return
 ; Assign magnet links as default
 BtnAssMagnet:
 	assignMagnetLink()
-
-return
+	return
 
 
 ;-------- Save settings button ----------------------
@@ -407,31 +395,16 @@ BtnSettingsOk:
 	;---Actions------
 	Gui, 3:Destroy
 	populateFromFile()
-	centerWindow("MagneticKelp")
+	;centerWindow("MagneticKelp")
 	Gui, 1:show
-return
+	return
 
 
 BtnSettingsCancel:
 	Gui, 3:Destroy
 	Gui, 1:Show
 
-return
-
-
-; GoOption:
-; 	Gui, Submit
-; 	mainLink = %1%
-; 	Gui, Destroy
-
-; 	makePeerflix(mainLink, Options)
-; 	ExitApp
-; ---------------
-
-
-;TODO performance increase
-;Draw Gui hidden
-
+	return
 
 
 ;---------settings tab 2 --------------
@@ -478,17 +451,21 @@ IE_BeforeNavigate2(p*) {
 
  ; MsgBox % p.2
  	1=% p.2
- 	Gui 1:Hide
+ 	animateTorrentLoaded()
+}
+
+
+animateTorrentLoaded(){
+	Global
+	Gui 1:Hide
  	sleep, 50
  	Gui 1:Show
  	html.="<script>document.getElementById('mainText').innerHTML='Torrent loaded';</script>"
  	html.="<style>body {border-color:#0080ff; border-width: 2px;}</style>"
 	wb.document.write(html)
-
 }
 
 
-		;____________________Stream Custom Window__________________________
 
 ;_________________________________________________________________________
 
@@ -516,6 +493,8 @@ makeIniFile(){
 	;IniWrite,--,%IniLocation%,programLocation,bittorrent
 	;IniWrite,--,%IniLocation%,programLocation,popcorntime
 }
+
+
 assignMagnetLink(){
 	; ----------------- Current user -------------
 	RegWrite,REG_SZ,HKEY_CURRENT_USER,Software\Classes\magnet,,URL:Magnet link
@@ -543,9 +522,10 @@ firstTimeCheck(){
     	
 	
 }
-notFirstTime(){
 
+notFirstTime(){
 	makeIniFile()
+;Assign as default magnet link check
 	Msgbox, 262180,, This appears to be your first time running this application. Set MagneticKelp to be the default application for magnet links?
 	IfMsgBox No
 		return
@@ -631,8 +611,6 @@ centerWindow(WinTitle=""){
 	;select default screen
     IniRead, DefaultMonitor, %IniLocation%, defaults, defaultMonitor
     ;GuiControl,ChooseString,ComboBox3,%DefaultMonitor%
-    
-    
     ;set to MONITOR BELOW
     Sysget,area1,Monitor,%DefaultMonitor%
 
@@ -650,6 +628,7 @@ centerWindow(WinTitle=""){
 
 
 
+;populates the main window from the settings.ini file
 populateFromFile(){
 	Global
 	IniRead, DefaultStreamComboBox, %IniLocation%, defaults, defaultStreamer
@@ -658,19 +637,41 @@ populateFromFile(){
 	GuiControl,1:ChooseString,ComboBox1,%DefaultStreamComboBox%
 ;AHK Bug? ChooseString does not select String with 'µ' character.
 	if(DefaultDownloadBox="µTorrent")
-		GuiControl,1:Choose,ComboBox2,2	;2nd option = qbittorrent
+		GuiControl,1:Choose,ComboBox2,2	;2nd option = µtorrent
 	else
 		GuiControl,1:ChooseString,ComboBox2,%DefaultDownloadBox%
 	centerWindow("MagneticKelp")
-	;MsgBox, The value is %OutputVar%.
-	;newStr:=SubStr(DefaultDownloadBox,2)
-
-	;MsgBox, µTorrent + %newStr%
+	
 }
 
 populateSettingsFromFile(){
 	Global
 	centerWindow("Settings")
+
+;-----------Tab 1 ------------------
+	IniRead, DefaultStreamComboBox, %IniLocation%, defaults, defaultStreamer
+    GuiControl,3:ChooseString,ComboBox1,%DefaultStreamComboBox%
+    
+    IniRead, DefaultDlComboBox, %IniLocation%, defaults, defaultDownloader
+    if(DefaultDlComboBox="µTorrent")
+		GuiControl,3:Choose,ComboBox2,2	;2nd option = 
+	else
+		GuiControl,3:ChooseString,ComboBox2,%DefaultDlComboBox%
+    ;GuiControl,3:ChooseString,ComboBox2,%DefaultDlComboBox%
+	;Reuse CMD
+    IniRead, ReuseCmd, %IniLocation%, defaults, reuseCmd
+    GuiControl,3:,ReuseCmd,%ReuseCmd%
+    
+    ;Calculate the amount of screens, and populate the GUI comboBox
+    SysGet,countMonitor,MonitorCount
+    Loop, %countMonitor%{   ;populate dropdowb based on amount of screens
+        ;MsgBox Monitor # %A_Index%
+        GuiControl,3:,ComboBox3,%A_Index%
+    }  
+    
+    ;select default screen
+  	IniRead, DefaultMonitor, %IniLocation%, defaults, defaultMonitor
+   	GuiControl,3:ChooseString,ComboBox3,%DefaultMonitor%
 
 
 ;-----------Tab 2 ------------------
@@ -686,38 +687,7 @@ populateSettingsFromFile(){
     GuiControl,3:,Edit5,%DefaultLocation%
 
 
-
-;-----------Tab 1 ------------------
-	IniRead, DefaultStreamComboBox, %IniLocation%, defaults, defaultStreamer
-    GuiControl,3:ChooseString,ComboBox1,%DefaultStreamComboBox%
-    
-    IniRead, DefaultDlComboBox, %IniLocation%, defaults, defaultDownloader
-    if(DefaultDlComboBox="µTorrent")
-		GuiControl,3:Choose,ComboBox2,2	;2nd option = 
-	else
-		GuiControl,3:ChooseString,ComboBox2,%DefaultDlComboBox%
-    ;GuiControl,3:ChooseString,ComboBox2,%DefaultDlComboBox%
-;Reuse CMD
-    IniRead, ReuseCmd, %IniLocation%, defaults, reuseCmd
-    GuiControl,3:,ReuseCmd,%ReuseCmd%
-    
-    ;Calculate the amount of screens, and populate the GUI comboBox
-    SysGet,countMonitor,MonitorCount
-    Loop, %countMonitor%{   ;populate dropdowb based on amount of screens
-        ;MsgBox Monitor # %A_Index%
-        GuiControl,3:,ComboBox3,%A_Index%
-    }  
-
-    
-    ;select default screen
-  	IniRead, DefaultMonitor, %IniLocation%, defaults, defaultMonitor
-   	GuiControl,3:ChooseString,ComboBox3,%DefaultMonitor%
-
     return
-
-
-	
-
 }
 
 	;----------------- Settings-----------------------
