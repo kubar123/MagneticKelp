@@ -60,7 +60,7 @@ makeMainWindow(){
 	Gui 1:Font, s14
 	Gui 1:Add, Button, hWndButton8 gBtnPopcornTime x16 y56 w23 h23, 🍿
 	Gui 1:Font
-	Gui, 1:Add, ActiveX, x0 y80 w300 h62 vwb, Shell.Explorer
+	Gui 1:Add, ActiveX, x10 y91 w280 h30 vwb, Shell.Explorer
 	
 
 	;Active X information---------
@@ -68,8 +68,9 @@ makeMainWindow(){
 
 	wb.Navigate("about:tabs")
 	;-----HTML-------
-	html:="<html><head onContextMenu='return false;'>"
-	html.="<style>body{background-color:#F1F1F1; height:100%; overflow:hidden; filter:alpha(opacity=66);}, div { padding-top:3px; height:100%; overflow:hidden; font-family: 'Kalam'; -ms-user-select: none; cursor:default; text-align: center; border-width:1px; border-style:dashed; }</style>"
+	html:="<html onContextMenu='return false;' ><head onContextMenu='return false;'>"
+	html.="<style>body{ margin: 0; padding: 0; background-color:#f1f1f1; height:100%; overflow:hidden; filter:alpha(opacity=60); border-style:dashed; border-width:1px; }, "
+	html.="div { padding-top:4px; height:100%; overflow:hidden; font-family: 'Kalam'; -ms-user-select: none; cursor:default; text-align: center;  }</style>"
 	html.="</head><body><div unselectable='on' onContextMenu='return false;'>Drop magnet links here"
 	;html.="<div onContentMenu='return false;'><img onContentMenu='return false;' width='300' height='60' src='D:\OneDrive\git\MagneticKelp\download.png'/>"
 	html.="</div></body></html>"
@@ -84,7 +85,7 @@ makeMainWindow(){
 	Process,Exist
 
 	
-	Gui 1:Show, w320 h132 x-500 y-500, MagneticKelp
+	Gui 1:Show, w320 h124 x-500 y-500, MagneticKelp
 
 }
 		;______________________SETTINGS WINDOW ________________________
