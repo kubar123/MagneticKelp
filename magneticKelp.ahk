@@ -37,7 +37,12 @@ return
 ;==================================================================================================================================
 ;-----------------------------------------------FRONT END - GUI -------------------------------------------------------------------
 ;==================================================================================================================================
-
+menuHandler:
+menuGithub:
+;menuPreferences:
+menuAbout:
+editMenu:
+return
 		;__________________________MAIN WINDOW_________________________
 makeMainWindow(){
 	global
@@ -61,6 +66,31 @@ makeMainWindow(){
 	Gui 1:Font
 	Gui 1:Add, ActiveX, x10 y91 w280 h30 vwb, Shell.Explorer
 	
+	;---------------- MENU BAR ----------------------------	
+	Menu HelpMenu, Add, &About, menuAbout
+	Menu HelpMenu, Icon, &About, shell32.dll, 24
+
+	Menu EditMenu, Add, Preferences, MenuPreferences
+
+	
+	;Menu HelpMenu, Add, Github, MenuHandler
+	Menu HelpMenu, Add, Github, menuGithub
+
+	Menu HelpMenu, Add, Check for updates, menuUpdater
+	Menu HelpMenu, Icon, Check for updates, shell32.dll, 239
+	;Menu HelpMenu, Add, Github, menuGithub
+
+	
+	Menu MenuBar, Add, &Edit, :EditMenu
+	Menu MenuBar, Add, Help, :HelpMenu
+
+	
+	;Menu MenuBar, Add, &Edit, EditMenu
+
+	
+	Gui Menu, MenuBar
+
+;-----------------------------------------
 
 ;---------Drag and drop files -----------
 	;Active X information---------
@@ -254,6 +284,13 @@ CheckHover:
 ;-----------------------------------------------Actions/Buttons -------------------------------------------------------------------
 ;==================================================================================================================================
 
+;========================= MENU BAR ==========================
+;------------ Menu Updater -----------------
+menuUpdater:
+	checkForNewVersions()
+	return
+
+
 ; ----------Drag and drop file ------------
 GuiDropFiles:
 	1=%A_GuiEvent%
@@ -279,6 +316,7 @@ BtnStreamCustomGo:
 
 
 ;------------- Main Window -----------------
+menuPreferences:
 BtnSettings:
 ;global StreamWit
 	gui,1:hide
@@ -520,6 +558,16 @@ assignMagnetLink(){
 firstTimeCheck(){
 	Global
 	;MsgBox, %location%
+	;see if Update
+	;Msgbox %1%
+	if 1 contains update
+		runBatch()
+		;msgBox verified update
+	; if(1="update")
+	; {
+		
+	; }
+
 	IfNotExist, %IniLocation%
 		notFirstTime()
     ;check if program is up to date
@@ -719,8 +767,20 @@ addShortcutsToStartMenu(){
 
 }
 
+
+
+;==================================================================================================================================
+;----------------------------------------------------------------------------------------------------------------------------------
+;==================================================================================================================================
+
+
+;============================================================UPDATE====================================================
+
+
 checkForNewVersions(){
+	
 	Global
+	
 	;https://github.com/kubar123/MagneticKelp/blob/master/README.md
 	whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
 	whr.open("GET","https://github.com/kubar123/MagneticKelp/tags",true)
@@ -743,29 +803,44 @@ checkForNewVersions(){
 	;version information:
 	numericalVersion:= subStr(versionInfo,vFoundPos+1,versionLength-1)
 
-	MsgBox % "Newest version: " numericalVersion
+	;MsgBox % "Newest version: " numericalVersion
 
 	if(PROGRAM_VERSION<numericalVersion){
-		Msgbox,36,, New version available, update now?
+		Msgbox,262180,, New version available, update now?
 		IfMsgBox Yes
 			newVersionUpdater(numericalVersion)
 		IfMsgBox No
-			msgbox Not downloading the file...
+			return
 	}if(PROGRAM_VERSION>=numericalVersion){
 		;MsgBox No new versions
 		return 0
 	}
 
-	;return PROGRAM_VERSION>=
+	return 
 }
 
 newVersionUpdater(versionToDownload=0){
+	Global
+	Gui, 1:hide
+	SplashTextOn,300,120,Update in progres..., The application might restart once, after this message closes, a command window should flash for a second. Once it closes the update has been completed.
 	UrlLocation=https://github.com/kubar123/MagneticKelp/releases/download/v%versionToDownload%/magneticKelp.exe
-	MsgBox %UrlLocation%
-	UrlDownloadToFile, %UrlLocation%,%ExeLocation%
+	;MsgBox %UrlLocation%
+	UrlDownloadToFile, %UrlLocation%, %ExeLocation%NEW
+	;MsgBox %ExeLocation%
+
+	;---- Making batch file-----
+	Str:="echo off `nping 127.0.0.1 -n 3 > nul`ndel %~dp0\magneticKelp.exe /q"
+	Str.="`nren %~dp0\magneticKelp.exeNew magneticKelp.exe `n(goto) 2>nul & del ""%~f0"""
+	FileAppend, %Str%, %A_AppData%/magneticKelp/info.bat
+	sleep, 2000
+	if(!A_IsAdmin){
+		Run *RunAs "%A_ScriptFullPath%" "update"
+		ExitApp
+	}
+	runBatch()
 }
-;==================================================================================================================================
-;----------------------------------------------------------------------------------------------------------------------------------
-;==================================================================================================================================
-
-
+runBatch(){
+	batchToRun=  %A_AppData%/magneticKelp/info.bat
+	Run, %batchToRun%
+	ExitApp
+}
