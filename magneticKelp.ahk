@@ -12,7 +12,7 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
 ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
-PROGRAM_VERSION=0.3.2
+PROGRAM_VERSION=0.3.3
 
 
 ;==============================================	/END GLOBAL ==============================
@@ -21,6 +21,7 @@ PROGRAM_VERSION=0.3.2
 makeMainWindow()
 ;checkForNewVersions()
 
+;addShortcutsToStartMenu()
 firstTimeCheck()	
 
 populateFromFile()
@@ -71,7 +72,8 @@ makeMainWindow(){
 	Menu HelpMenu, Icon, &About, shell32.dll, 24
 
 	Menu EditMenu, Add, Preferences, MenuPreferences
-
+	Menu EditMenu, Add, Add shortcut to start , addShortcutsToStartMenu
+	Menu EditMenu, Icon, Add shortcut to start , imageres.dll, 4
 	
 	;Menu HelpMenu, Add, Github, MenuHandler
 	Menu HelpMenu, Add, Github, menuGithub
@@ -567,6 +569,8 @@ firstTimeCheck(){
 	;MsgBox, %location%
 	;see if Update
 	;Msgbox %1%
+	if 1 contains shortCutAddition
+		addShortcutsToStartMenu()
 	if 1 contains update
 		runBatch()
 		;msgBox verified update
@@ -764,14 +768,24 @@ pickFileAndUpdateGui(filter="",elementName=""){
 		Return
 	GuiControl,,%elementName%,%destinationPath%
 }
-
+addShortcutsToStartMenu:
+addShortcutsToStartMenu()
+return
 addShortcutsToStartMenu(){
+	Global
 
+	if(!A_IsAdmin){
+		Run *RunAs "%A_ScriptFullPath%" "shortCutAddition"
+		ExitApp
+	}
+	
 	;TODO
 	;Add shrotcuts for start menu
-	
-
-
+	;%programdata%\Microsoft\Windows\Start Menu\Programs\magneticKelp
+	StartMenuLocation=%A_AppDataCommon%\Microsoft\Windows\Start Menu\Programs\magneticKelp
+	FileCreateDir, %startMenuLocation%
+	FileCreateShortcut, %ExeLocation%,%startMenuLocation%\magneticKelp.lnk ,
+	Msgbox,262144,, Done!
 }
 
 
@@ -797,7 +811,7 @@ checkForNewVersions(){
 	;MsgBox %info%
 	foundPos:= inStr(info, "tag-name")
 	if(!foundPos)
-	MsgBox Not found
+	MsgBox,262144,, Not found
 	Else
 	;msgbox found at: %foundPos%
 	versionInfo:=SubStr(info,foundPos,19)
