@@ -12,7 +12,7 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
 ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
-PROGRAM_VERSION=0.3.0
+PROGRAM_VERSION=0.3.1
 
 
 ;==============================================	/END GLOBAL ==============================
@@ -819,7 +819,7 @@ checkForNewVersions(){
 		IfMsgBox No
 			return
 	}if(PROGRAM_VERSION>=numericalVersion){
-		;MsgBox No new versions
+		MsgBox You are running the latest version
 		return 0
 	}
 
