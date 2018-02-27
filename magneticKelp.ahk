@@ -12,7 +12,7 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
 ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
-PROGRAM_VERSION=0.3.3
+PROGRAM_VERSION=0.3.3.1
 
 
 ;==============================================	/END GLOBAL ==============================
@@ -815,19 +815,30 @@ checkForNewVersions(){
 	Else
 	;msgbox found at: %foundPos%
 	versionInfo:=SubStr(info,foundPos,19)
-
+	versionDesc:=SubStr(info,foundPos,1000)
 	;Msgbox % versionInfo
 	vFoundPos:=inStr(versionInfo,"v")
 	endFoundPos:=inStr(versionInfo,"<")
 	versionLength:=endFoundPos-vFoundPos
+	;version desc
+	commitFoundPos:=inStr(versionDesc,"commit-desc")+52
+	SubStringed:=SubStr(versionDesc,commitFoundPos,1000)
+	EndTextFoundPos:=inStr(SubStringed,"</pre>")
+
+	SubStringed2:=SubStr(SubStringed,1,EndTextFoundPos-1)
+
+
+	;msgbox %SubStringed2%
 
 	;version information:
-	numericalVersion:= subStr(versionInfo,vFoundPos+1,versionLength-1)
+	numericalVersion:= SubStr(versionInfo,vFoundPos+1,versionLength-1)
 
 	;MsgBox % "Newest version: " numericalVersion
 
 	if(PROGRAM_VERSION<numericalVersion){
-		Msgbox,262180,, New version available, update now?
+		msgBoxStr=Current version: %PROGRAM_VERSION% New version:%numericalVersion%`nUpdate now? `n`nChange Log: `n
+		MsgBoxStr.=SubStringed2
+		Msgbox,262180,New update found,  %msgBoxStr%
 		IfMsgBox Yes
 			newVersionUpdater(numericalVersion)
 		IfMsgBox No
