@@ -12,7 +12,7 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
 ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
-PROGRAM_VERSION=0.3.1
+PROGRAM_VERSION=0.3.2
 
 
 ;==============================================	/END GLOBAL ==============================
@@ -360,7 +360,7 @@ btnDownload:
 	}
 
 	else{
-		MsgBox Uhh... [DL BTN-SelectionOutOfBounds] Error
+		MsgBox,262144,, Uhh... [DL BTN-SelectionOutOfBounds] Error
 		ExitApp
 	}
 	Run %progLocation% "%1%"
@@ -404,7 +404,7 @@ BtnAssTorrent:
 
 
 	}Else{
-		msgbox Please run the application as Administrator, or manually change the setting.
+		msgbox,262144,, Please run the application as Administrator, or manually change the setting.
 		return
 	}
 return
@@ -819,7 +819,7 @@ checkForNewVersions(){
 		IfMsgBox No
 			return
 	}if(PROGRAM_VERSION>=numericalVersion){
-		MsgBox You are running the latest version
+		MsgBox,262144,, You are running the latest version
 		return 0
 	}
 
