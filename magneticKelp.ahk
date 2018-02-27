@@ -12,7 +12,7 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
 ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
-PROGRAM_VERSION=0.2.0
+PROGRAM_VERSION=0.3.0
 
 
 ;==============================================	/END GLOBAL ==============================
@@ -32,15 +32,15 @@ betaFeatureDisable()
 return
 ; -----------------------------------------------------------------
 
-
+menuGithub:
+run https://github.com/kubar123/MagneticKelp
+return
 
 ;==================================================================================================================================
 ;-----------------------------------------------FRONT END - GUI -------------------------------------------------------------------
 ;==================================================================================================================================
 menuHandler:
-menuGithub:
 ;menuPreferences:
-menuAbout:
 editMenu:
 return
 		;__________________________MAIN WINDOW_________________________
@@ -53,7 +53,7 @@ makeMainWindow(){
 	Gui 1:Add, GroupBox, x8 y2 w153 h88, Stream
 	Gui 1:Add, CheckBox, vListPeerflix x16 y24 w68 h23, List files
 	Gui 1:Font, s20 Bold
-	Gui 1:Add, Button, hWndButton4 vBtnSettings gBtnSettings x292 y2 w25 h25, ⚙
+	;Gui 1:Add, Button, hWndButton4 vBtnSettings gBtnSettings x292 y2 w25 h25, ⚙
 	Gui 1:Font
 	Gui 1:Add, GroupBox, x168 y2 w121 h88, Download
 	Gui 1:Add, Button, gbtnDownload x192 y56 w80 h23, Download
@@ -241,17 +241,17 @@ CheckHover:
 			;MsgBox %MyWindowID% and %windowID% - and %controlID% and %Button4%
 
 		;-- settings/ configuration button check
-		  	if(controlID = Button4){
-		  		;get position of the button
-		  		ControlGetPos,varX,varY,varWidth,varHeight,Button4,MagneticKelp,,,
-				varX+=varWidth	; change the location of the tooltip X value to be 
-								;to the right of the win
-		    ;Sleep, 50
-		    ;if(windowID)
-		    	ToolTip, Global settings and configuration, %varX%, %varY%
-		    ;ToolTip, [ test, X, Y, WhichToolTip]
-		    	return
-			}
+		 ;  	if(controlID = Button4){
+		 ;  		;get position of the button
+		 ;  		ControlGetPos,varX,varY,varWidth,varHeight,Button4,MagneticKelp,,,
+			; 	varX+=varWidth	; change the location of the tooltip X value to be 
+			; 					;to the right of the win
+		 ;    ;Sleep, 50
+		 ;    ;if(windowID)
+		 ;    	ToolTip, Global settings and configuration, %varX%, %varY%
+		 ;    ;ToolTip, [ test, X, Y, WhichToolTip]
+		 ;    	return
+			; }
 			if(controlID=Button8){
 				ControlGetPos,varX,varY,varWidth,varHeight,Button8,MagneticKelp,,,
 				varX+=varWidth	; change the location of the tooltip X value to be 
@@ -289,8 +289,15 @@ CheckHover:
 menuUpdater:
 	checkForNewVersions()
 	return
+;----------- Menu About -------------------
+menuAbout:
+MsgBox,262144,, MagneticKelp, Version %PROGRAM_VERSION% `n
+return
 
 
+
+
+;=============================================================
 ; ----------Drag and drop file ------------
 GuiDropFiles:
 	1=%A_GuiEvent%
@@ -840,7 +847,10 @@ newVersionUpdater(versionToDownload=0){
 	runBatch()
 }
 runBatch(){
+	SplashTextOn,200,100,Update in progres...
 	batchToRun=  %A_AppData%/magneticKelp/info.bat
 	Run, %batchToRun%
 	ExitApp
 }
+
+;===================================== END UPDATE ================================================
