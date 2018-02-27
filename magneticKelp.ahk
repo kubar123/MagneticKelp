@@ -293,7 +293,7 @@ menuUpdater:
 	return
 ;----------- Menu About -------------------
 menuAbout:
-MsgBox,262144,, MagneticKelp, Version %PROGRAM_VERSION% `n
+MsgBox,262144,About,MagneticKelp`nVersion %PROGRAM_VERSION% `n©Jakub Rybicki
 return
 
 
