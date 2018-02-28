@@ -212,7 +212,7 @@ ExitApp
 
 ;TODO remove when features working
 betaFeatureDisable(){
-	 GuiControl,Disable, Button8
+	 GuiControl,Disable, Button7
 	 ;GuiControl,Disable, Button7
 	 ;GuiControl,Disable, Button10
 }
@@ -255,7 +255,7 @@ CheckHover:
 		 ;    	return
 			; }
 			if(controlID=Button8){
-				ControlGetPos,varX,varY,varWidth,varHeight,Button8,MagneticKelp,,,
+				ControlGetPos,varX,varY,varWidth,varHeight,Button7,MagneticKelp,,,
 				varX+=varWidth	; change the location of the tooltip X value to be 
 				varY+=varHeight	;to the right of the win
 
@@ -264,7 +264,7 @@ CheckHover:
 			}
 			if(controlID=BtnStreamCustom){
 				;ControlGetPos,varX,varY,varWidth,varHeight,BtnStreamCustom,Stream,,,
-				ControlGetPos,varX,varY,varWidth,varHeight,Button8,MagneticKelp,,,
+				ControlGetPos,varX,varY,varWidth,varHeight,Button6,MagneticKelp,,,
 				VarX+=varWidth
 				;varY+=varHeight	;to the right of the win
 
