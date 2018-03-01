@@ -1,11 +1,12 @@
+<img align="right" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/Two.PNG"/>
+
 # MagneticKelp
 
-<img align="right" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/Two.PNG"/>
+
 
 MagneticKelp is a torrent client manager for windows. It helps with streaming, or downloading a file when you have multiple torrenting clients installed.
 
 <img align="right" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/three.PNG"/>
-
 
 [**Download** latest version](https://github.com/kubar123/MagneticKelp/releases/latest)
 
