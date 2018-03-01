@@ -1,10 +1,14 @@
 # MagneticKelp
+<img align="right" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/Two.PNG"/>
 
 <img align="right" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/three.PNG"/>
 
 MagneticKelp is a torrent client manager for windows. It helps with streaming, or downloading a file when you have multiple torrenting clients installed.
 
-![Main Window](https://github.com/kubar123/MagneticKelp/blob/master/Img/Two.PNG) 
+
+[**Download** latest version](https://github.com/kubar123/MagneticKelp/releases/latest)
+
+[Streaming torrents with peerflix](https://github.com/kubar123/MagneticKelp#using-magnetickelp-to-stream---peerflix---optional)
 
 Install directory:
 ```
