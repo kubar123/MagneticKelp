@@ -12,7 +12,7 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
 ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
-PROGRAM_VERSION=0.3.3.1
+PROGRAM_VERSION=0.3.4.3
 
 
 ;==============================================	/END GLOBAL ==============================
@@ -785,7 +785,7 @@ addShortcutsToStartMenu(){
 	StartMenuLocation=%A_AppDataCommon%\Microsoft\Windows\Start Menu\Programs\magneticKelp
 	FileCreateDir, %startMenuLocation%
 	FileCreateShortcut, %ExeLocation%,%startMenuLocation%\magneticKelp.lnk ,
-	Msgbox,262144,, Done!
+	Msgbox,262144,magneticKelp, Done!
 }
 
 
@@ -798,52 +798,42 @@ addShortcutsToStartMenu(){
 ;============================================================UPDATE====================================================
 
 
+
 checkForNewVersions(){
-	
 	Global
-	
-	;https://github.com/kubar123/MagneticKelp/blob/master/README.md
+	;find latest released version
 	whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-	whr.open("GET","https://github.com/kubar123/MagneticKelp/tags",true)
+	whr.open("GET","https://api.github.com/repos/kubar123/magneticKelp/releases/latest",true)
 	whr.Send()
 	whr.waitForResponse()
 	info:=whr.ResponseText
-	;MsgBox %info%
-	foundPos:= inStr(info, "tag-name")
-	if(!foundPos)
-	MsgBox,262144,, Not found
-	Else
-	;msgbox found at: %foundPos%
-	versionInfo:=SubStr(info,foundPos,19)
-	versionDesc:=SubStr(info,foundPos,1000)
-	;Msgbox % versionInfo
-	vFoundPos:=inStr(versionInfo,"v")
-	endFoundPos:=inStr(versionInfo,"<")
-	versionLength:=endFoundPos-vFoundPos
-	;version desc
-	commitFoundPos:=inStr(versionDesc,"commit-desc")+52
-	SubStringed:=SubStr(versionDesc,commitFoundPos,1000)
-	EndTextFoundPos:=inStr(SubStringed,"</pre>")
 
-	SubStringed2:=SubStr(SubStringed,1,EndTextFoundPos-1)
+	;find the version
+	latestVersion:=inStr(info,"tag_name")
+	latestVersionNo:=SubStr(info,latestVersion+12,5) ;12 chars after the inStr starts version,
+
+	
+	;New update available
+	if(PROGRAM_VERSION<latestVersionNo){
+		;Find the changes description
+		latestVersionDescNo:=inStr(info,"body")
+		latestVersionText:=SubStr(info,latestVersionDescNo+7)
+		;remove ending JSON tags
+		latestVersionText:=SubStr(latestVersionText,1,strLen(latestVersionText)-2)
+		latestVersionText=Current version: v%PROGRAM_VERSION% Latest version: v%latestVersionNo%`nUpdate now? `n`nChange log:`n%latestVersionText%
+		;Format the text to remove MD tags (eg. ##, /n, /r)
+		latestVersionText:=StrReplace(latestVersionText,"\n"," `n")
+		latestVersionText:=StrReplace(latestVersionText,"##"," ---")
+		latestVersionText:=StrReplace(latestVersionText,"\r"," ")
 
 
-	;msgbox %SubStringed2%
-
-	;version information:
-	numericalVersion:= SubStr(versionInfo,vFoundPos+1,versionLength-1)
-
-	;MsgBox % "Newest version: " numericalVersion
-
-	if(PROGRAM_VERSION<numericalVersion){
-		msgBoxStr=Current version: %PROGRAM_VERSION% New version:%numericalVersion%`nUpdate now? `n`nChange Log: `n
-		MsgBoxStr.=SubStringed2
-		Msgbox,262180,New update found,  %msgBoxStr%
+		;----Ask user to update----
+		Msgbox,262180,New update found,%latestVersionText%
 		IfMsgBox Yes
-			newVersionUpdater(numericalVersion)
+			newVersionUpdater(latestVersionNo)
 		IfMsgBox No
 			return
-	}if(PROGRAM_VERSION>=numericalVersion){
+	}if(PROGRAM_VERSION>=latestVersionNo){
 		MsgBox,262144,, You are running the latest version
 		return 0
 	}

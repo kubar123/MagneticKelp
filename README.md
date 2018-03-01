@@ -10,6 +10,7 @@ Install directory:
 ```
 %appdata%\MagneticKelp
 ```
+
 <hr>
 
 
