@@ -12,7 +12,7 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
 ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
-PROGRAM_VERSION=0.3.3.2
+PROGRAM_VERSION=0.3.3.1
 
 
 ;==============================================	/END GLOBAL ==============================
@@ -25,6 +25,9 @@ makeMainWindow()
 firstTimeCheck()	
 
 populateFromFile()
+
+; IfNotExist, %IniLocation%
+; 	makeIniFile()
 
 betaFeatureDisable()
 return
@@ -209,7 +212,7 @@ ExitApp
 
 ;TODO remove when features working
 betaFeatureDisable(){
-	 GuiControl,Disable, Button7
+	 GuiControl,Disable, Button8
 	 ;GuiControl,Disable, Button7
 	 ;GuiControl,Disable, Button10
 }
@@ -252,7 +255,7 @@ CheckHover:
 		 ;    	return
 			; }
 			if(controlID=Button8){
-				ControlGetPos,varX,varY,varWidth,varHeight,Button7,MagneticKelp,,,
+				ControlGetPos,varX,varY,varWidth,varHeight,Button8,MagneticKelp,,,
 				varX+=varWidth	; change the location of the tooltip X value to be 
 				varY+=varHeight	;to the right of the win
 
@@ -261,7 +264,7 @@ CheckHover:
 			}
 			if(controlID=BtnStreamCustom){
 				;ControlGetPos,varX,varY,varWidth,varHeight,BtnStreamCustom,Stream,,,
-				ControlGetPos,varX,varY,varWidth,varHeight,Button6,MagneticKelp,,,
+				ControlGetPos,varX,varY,varWidth,varHeight,Button8,MagneticKelp,,,
 				VarX+=varWidth
 				;varY+=varHeight	;to the right of the win
 
@@ -290,7 +293,7 @@ menuUpdater:
 	return
 ;----------- Menu About -------------------
 menuAbout:
-MsgBox,262144,About,MagneticKelp`nVersion %PROGRAM_VERSION% `n©Jakub Rybicki
+MsgBox,262144,, MagneticKelp, Version %PROGRAM_VERSION% `n
 return
 
 
@@ -566,9 +569,9 @@ firstTimeCheck(){
 	;MsgBox, %location%
 	;see if Update
 	;Msgbox %1%
-	if (1 >< "shortCutAddition")
+	if 1 contains shortCutAddition
 		addShortcutsToStartMenu()
-	if (1 >< "update")
+	if 1 contains update
 		runBatch()
 		;msgBox verified update
 	; if(1="update")
