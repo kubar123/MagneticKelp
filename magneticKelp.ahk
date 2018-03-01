@@ -12,7 +12,7 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
 ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
-PROGRAM_VERSION=0.3.3.1
+PROGRAM_VERSION=0.3.3.2
 
 
 ;==============================================	/END GLOBAL ==============================
@@ -25,9 +25,6 @@ makeMainWindow()
 firstTimeCheck()	
 
 populateFromFile()
-
-; IfNotExist, %IniLocation%
-; 	makeIniFile()
 
 betaFeatureDisable()
 return
@@ -569,9 +566,9 @@ firstTimeCheck(){
 	;MsgBox, %location%
 	;see if Update
 	;Msgbox %1%
-	if 1 contains shortCutAddition
+	if (1 >< "shortCutAddition")
 		addShortcutsToStartMenu()
-	if 1 contains update
+	if (1 >< "update")
 		runBatch()
 		;msgBox verified update
 	; if(1="update")
