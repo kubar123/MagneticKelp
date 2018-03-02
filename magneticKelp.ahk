@@ -212,7 +212,7 @@ ExitApp
 
 ;TODO remove when features working
 betaFeatureDisable(){
-	 GuiControl,Disable, Button8
+	 GuiControl,Disable, Button7
 	 ;GuiControl,Disable, Button7
 	 ;GuiControl,Disable, Button10
 }
@@ -255,7 +255,7 @@ CheckHover:
 		 ;    	return
 			; }
 			if(controlID=Button8){
-				ControlGetPos,varX,varY,varWidth,varHeight,Button8,MagneticKelp,,,
+				ControlGetPos,varX,varY,varWidth,varHeight,Button7,MagneticKelp,,,
 				varX+=varWidth	; change the location of the tooltip X value to be 
 				varY+=varHeight	;to the right of the win
 
@@ -264,7 +264,7 @@ CheckHover:
 			}
 			if(controlID=BtnStreamCustom){
 				;ControlGetPos,varX,varY,varWidth,varHeight,BtnStreamCustom,Stream,,,
-				ControlGetPos,varX,varY,varWidth,varHeight,Button8,MagneticKelp,,,
+				ControlGetPos,varX,varY,varWidth,varHeight,Button6,MagneticKelp,,,
 				VarX+=varWidth
 				;varY+=varHeight	;to the right of the win
 
@@ -293,7 +293,7 @@ menuUpdater:
 	return
 ;----------- Menu About -------------------
 menuAbout:
-MsgBox,262144,, MagneticKelp, Version %PROGRAM_VERSION% `n
+MsgBox,262144,About,MagneticKelp`nVersion %PROGRAM_VERSION% `n©Jakub Rybicki
 return
 
 
@@ -303,7 +303,7 @@ return
 ; ----------Drag and drop file ------------
 GuiDropFiles:
 	1=%A_GuiEvent%
-	animateTorrentLoaded()
+	animateTorrentLoaded(1)
 	return
 
 
@@ -406,7 +406,7 @@ BtnAssTorrent:
 
 
 	}Else{
-		msgbox,262144,, Please run the application as Administrator, or manually change the setting.
+		msgbox,262144,Run as admin..., Please run the application as Administrator, or manually change the setting.
 		return
 	}
 return
@@ -496,21 +496,42 @@ BtnResetDefault:
 ;------ActiveX / Drag and drop magnet links -----------
 IE_BeforeNavigate2(p*) {
 	Global 
+	;Use entered link (anyway). Might aswell - this is a warning, not hard check.
+	;	 Dont want false positives
+	1=% p.2
+
+	;verify that the entered link is a magnet link:
+	; magnet:\?xt=urn:[a-z0-9] /i
+	isMagnetLink:=RegExMatch(p.2, "magnet:\?xt=urn:[a-z0-9]")
+	if(isMagnetLink){
+		animateTorrentLoaded(1)
+	}	Else{
+		animateTorrentLoaded(2)
+	}
  	NumPut(true, ComObjValue(p.7))
 
  ; MsgBox % p.2
- 	1=% p.2
- 	animateTorrentLoaded()
+ 	
+ 	;animateTorrentLoaded(1)
 }
 
 
-animateTorrentLoaded(){
+
+;Setting 1 = Torrent loaded correctly
+;Setting 2 = Torrent warning. Loaded, but does not appear to be a valid torrent
+animateTorrentLoaded(setting=0){
 	Global
 	Gui 1:Hide
  	sleep, 50
  	Gui 1:Show
- 	html.="<script>document.getElementById('mainText').innerHTML='Torrent loaded';</script>"
- 	html.="<style>body {border-color:#0080ff; border-width: 2px;}</style>"
+ 	if(setting=1){
+	 	html.="<script>document.getElementById('mainText').innerHTML='Torrent loaded';</script>"
+	 	html.="<style>body {border-color:#0080ff; border-width: 2px;}</style>"
+	}else if(setting=2){
+		html.="<script>document.getElementById('mainText').innerHTML='Not a valid torrent';</script>"
+	 	html.="<style>body {border-color:#FF4500; border-width: 2px;}</style>"
+	}
+
 	wb.document.write(html)
 }
 
@@ -569,9 +590,9 @@ firstTimeCheck(){
 	;MsgBox, %location%
 	;see if Update
 	;Msgbox %1%
-	if 1 contains shortCutAddition
+	if (1 >< shortCutAddition)
 		addShortcutsToStartMenu()
-	if 1 contains update
+	if (1 >< update)
 		runBatch()
 		;msgBox verified update
 	; if(1="update")
@@ -584,7 +605,7 @@ firstTimeCheck(){
     ;check if program is up to date
     IniRead, lastVerRan, %IniLocation%, Defaults, LastVersionRan
     if(lastVerRan < PROGRAM_VERSION){
-    	MsgBox,64,,You are running a new version of the application.`nMagneticKelp has been updated.
+    	MsgBox,64,Updated,You are running a new version of the application.`nMagneticKelp has been updated.
 		IniWrite,%PROGRAM_VERSION%,%IniLocation%,Defaults,LastVersionRan
 		FileCopy, %A_ScriptFullPath%,%A_AppData%\MagneticKelp\magneticKelp.exe,1
 
@@ -596,7 +617,7 @@ firstTimeCheck(){
 notFirstTime(){
 	makeIniFile()
 ;Assign as default magnet link check
-	Msgbox, 262180,, This appears to be your first time running this application. Set MagneticKelp to be the default application for magnet links?
+	Msgbox, 262180,use for magnet links?, This appears to be your first time running this application. Set MagneticKelp to be the default application for magnet links?
 	IfMsgBox No
 		return
 	ifMsgBox Yes
@@ -609,35 +630,32 @@ notFirstTime(){
 makePeerflix(MagnetLink="", Opts="", List=0){
 	Global
 	; ---- check to see if last PID (cmd window) is still open
-	IniRead, OutputVar, %IniLocation%, Peerflix, lastPID
+	IniRead, lastPid, %IniLocation%, Peerflix, lastPID
 	IniRead, reuseCmd, %IniLocation%, Defaults, reuseCmd
 
 ;TODO new line brackets forced? Error on inline brackets
 	;MsgBox %reuseCmd%
 	if(reuseCmd){
 			;msgBox reusing...
-		If WinExist("ahk_pid "OutputVar)
+		If WinExist("ahk_pid "lastPid)
 		{
 			;msgBox, Exist
 			
-			WinActivate, % "ahk_pid " OutputVar
+			WinActivate, % "ahk_pid " lastPid
 			Send ^c ^c ;{enter}		;end current stream
-			WinWait, ahk_pid %OutputVar%
+			WinWait, ahk_pid %lastPid%
 			Send ^c
 		}
 	}
 
-	IfWinNotExist, % "ahk_pid " OutputVar
+	IfWinNotExist, % "ahk_pid " lastPid
 	{
-		;msgbox, not Exist
-		;return
-		
-
+		;Saving PID to file - Reuse old CMD if still open
 		run cmd.exe,,,streamWindow
 		IniWrite,%streamWindow%,%IniLocation%,Peerflix,lastPID
 		WinWait, ahk_pid %streamWindow%
 		Send cd .. {enter}
-		;Saving PID to file - Reuse old CMD if still open
+		
 	}
 
 	;Return
@@ -844,13 +862,14 @@ checkForNewVersions(){
 newVersionUpdater(versionToDownload=0){
 	Global
 	Gui, 1:hide
-	SplashTextOn,300,120,Update in progres..., The application might restart once, after this message closes, a command window should flash for a second. Once it closes the update has been completed.
+	SplashTextOn,300,120,Update in progres..., The application might restart once after this message closes, a command window should flash for a second. `nOnce it closes the update has been completed.
 	UrlLocation=https://github.com/kubar123/MagneticKelp/releases/download/v%versionToDownload%/magneticKelp.exe
 	;MsgBox %UrlLocation%
 	UrlDownloadToFile, %UrlLocation%, %ExeLocation%NEW
 	;MsgBox %ExeLocation%
 
 	;---- Making batch file-----
+	;ping to wait until until window closes
 	Str:="echo off `nping 127.0.0.1 -n 3 > nul`ndel %~dp0\magneticKelp.exe /q"
 	Str.="`nren %~dp0\magneticKelp.exeNew magneticKelp.exe `n(goto) 2>nul & del ""%~f0"""
 	FileAppend, %Str%, %A_AppData%/magneticKelp/info.bat
