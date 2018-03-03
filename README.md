@@ -22,27 +22,21 @@ Install directory:
 
 ## Install
 ### Downloading MagneticKelp
-1. Click the releases tab above 
-<img align="center" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/install-releases.png" />
+1. Click the releases tab above, or [**Download** latest version](https://github.com/kubar123/MagneticKelp/releases/latest)
 2. Click the 'MagneticKelp.exe' link under 'Assets'
 <img align="center" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/install-exe.png" />
 
 ### Use MagneticKelp for magnet links
-1. Open settings (top right cog wheel)
+1. Open settings
 2. Under the 'file association' section, click the 'associate magnet links' button
 * The .exe file will be copied to the install directory noted above
 3. Click on a magnet link
 
-### Use MagneticKelp for .torrent files
-1. Run the application as administrator
-2. Under the 'file association' section, click the 'associate .torrent files' button
-
 *OR*
+1. Drag and drop a magnet link into the window
 
-1. Right click on a .torrent file
-2. Select 'Open With', and selece MagneticKelp. If necessary, browse for the file located in the install directory noted above.
 
-### Using MagneticKelp to stream - [Peerflix] - Optional
+### Streaming - [Peerflix] - Optional
 More information: https://github.com/mafintosh/peerflix
 
 1.  Install Node.js: https://nodejs.org/en/
@@ -68,5 +62,5 @@ npm install -g peerflix
 </table>
   
  ### Troubleshooting
-  * Open magneticKelp, open the settings (top right) and click the 'associate magnet links'. Click on any magnet link and magneticKelp should open
-  * Try deleing the install directory noted above, and running the application again.
+  * Open magneticKelp, open the settings and click the 'associate magnet links'.
+  * Try deleing the install directory noted above, or deleting the settings.ini file.
