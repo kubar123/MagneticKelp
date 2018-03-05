@@ -12,8 +12,8 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
 ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
-PROGRAM_VERSION=0.3.4.3
-
+PROGRAM_VERSION=0.3.5.0
+GITHUB_API_URL=https://api.github.com/repos/kubar123/magneticKelp/releases/latest
 
 ;==============================================	/END GLOBAL ==============================
 
@@ -157,20 +157,20 @@ makeSettingsWindow(){
 ;---------------------	------------	TAB 2
 	Gui 3:Tab, 2
 	Gui 3:Add, GroupBox, x16 y40 w310 h187, Program directory location
-	Gui 3:Add, Edit, vTxtQbitTorrent x88 y60 w192 h15 -0x800000 -E0x20201 +ReadOnly, C:\Program Files (x86)\Jar2Exe Wizard\j2ewiz.exe
+	Gui 3:Add, Edit, vTxtQbitTorrent x88 y60 w192 h15 -0x800000 -E0x20201 +ReadOnly, ---
 	Gui 3:Add, Text, x24 y60 w62 h13 +0x200, Qbittorrent:
 	Gui 3:Add, Button, gBtnQbitSelect x296 y60 w18 h18, ...
 	Gui 3:Add, Text, x24 y84 w62 h13 +0x200, μTorrent:
-	Gui 3:Add, Edit, vTxtUTorrent x88 y84 w192 h13 -0x800000 -E0x20201 +ReadOnly, C:\Users\7ghji\asd.dsa
+	Gui 3:Add, Edit, vTxtUTorrent x88 y84 w192 h13 -0x800000 -E0x20201 +ReadOnly, ---
 	Gui 3:Add, Button, gBtnUtorrentSelect x296 y84 w18 h18, ...
 	Gui 3:Add, Text, x24 y108 w62 h13 +0x200, Deluge:
-	Gui 3:Add, Edit, vTxtDeluge x88 y108 w192 h13 -0x800000 -E0x20201 +ReadOnly, C:\Users\7ghji\asd.dsa
+	Gui 3:Add, Edit, vTxtDeluge x88 y108 w192 h13 -0x800000 -E0x20201 +ReadOnly, ---
 	Gui 3:Add, Button, gBtnDelugeSelect x296 y108 w18 h18, ...
 	Gui 3:Add, Text, x24 y132 w62 h13 +0x200, Bittorrent:
-	Gui 3:Add, Edit, vTxtBittorrent x88 y132 w192 h13 -0x800000 -E0x20201 +ReadOnly, C:\Users\7ghji\asd.dsa
+	Gui 3:Add, Edit, vTxtBittorrent x88 y132 w192 h13 -0x800000 -E0x20201 +ReadOnly, ---
 	Gui 3:Add, Button, gBtnBittorrentSelect x296 y132 w18 h18, ...
 	Gui 3:Add, Text, x24 y156 w62 h13 +0x200, Popcorntime:
-	Gui 3:Add, Edit, vTxtPopcorntime x88 y156 w192 h13 -0x800000 -E0x20201 +ReadOnly, C:\Users\7ghji\asd.dsa
+	Gui 3:Add, Edit, vTxtPopcorntime x88 y156 w192 h13 -0x800000 -E0x20201 +ReadOnly, ---
 	Gui 3:Add, Button, gBtnPopcorntimeSelect x296 y156 w18 h18, ...
 	Gui 3:Add, Text, x88 y100 w198 h2 0x10
 	Gui 3:Add, Text, x88 y76 w196 h2 0x10
@@ -479,6 +479,9 @@ BtnPopcorntimeSelect:
 	return
 
 BtnResetDefault:
+	IniWrite,C:\Program Files (x86)\qBittorrent\qbittorrent.exe,%IniLocation%,programLocation,qbittorrent
+	IniWrite,%A_AppData%\uTorrent\uTorrent.exe,%IniLocation%,programLocation,uTorrent
+	IniWrite,C:\Program Files (x86)\Deluge\deluge.exe,%IniLocation%,programLocation,deluge
 	return
 
 
@@ -821,7 +824,7 @@ checkForNewVersions(){
 	Global
 	;find latest released version
 	whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-	whr.open("GET","https://api.github.com/repos/kubar123/magneticKelp/releases/latest",true)
+	whr.open("GET",GITHUB_API_URL,true)
 	whr.Send()
 	whr.waitForResponse()
 	info:=whr.ResponseText
