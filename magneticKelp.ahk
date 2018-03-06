@@ -15,6 +15,9 @@ ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
 PROGRAM_VERSION=0.3.5.0
 GITHUB_API_URL=https://api.github.com/repos/kubar123/magneticKelp/releases/latest
 
+LOCATION_QBIT=C:\Program Files (x86)\qBittorrent\qbittorrent.exe
+LOCATION_UTORRENT=%A_AppData%\uTorrent\uTorrent.exe
+LOCATION_DELUGE=C:\Program Files (x86)\Deluge\deluge.exe
 ;==============================================	/END GLOBAL ==============================
 
 ;---------------------------------- 	MAIN 	-------------------
@@ -479,9 +482,9 @@ BtnPopcorntimeSelect:
 	return
 
 BtnResetDefault:
-	IniWrite,C:\Program Files (x86)\qBittorrent\qbittorrent.exe,%IniLocation%,programLocation,qbittorrent
-	IniWrite,%A_AppData%\uTorrent\uTorrent.exe,%IniLocation%,programLocation,uTorrent
-	IniWrite,C:\Program Files (x86)\Deluge\deluge.exe,%IniLocation%,programLocation,deluge
+	IniWrite,%LOCATION_QBIT%,%IniLocation%,programLocation,qbittorrent
+	IniWrite,%LOCATION_UTORRENT%,%IniLocation%,programLocation,uTorrent
+	IniWrite,%LOCATION_DELUGE%,%IniLocation%,programLocation,deluge
 	return
 
 
@@ -561,9 +564,9 @@ makeIniFile(){
 	IniWrite,`n,%IniLocation%, Defaults, `n
 
 	;------------------[TAB 2]____Software Tab-------
-	IniWrite,C:\Program Files (x86)\qBittorrent\qbittorrent.exe,%IniLocation%,programLocation,qbittorrent
-	IniWrite,%A_AppData%\uTorrent\uTorrent.exe,%IniLocation%,programLocation,uTorrent
-	IniWrite,C:\Program Files (x86)\Deluge\deluge.exe,%IniLocation%,programLocation,deluge
+	IniWrite,%LOCATION_QBIT%,%IniLocation%,programLocation,qbittorrent
+	IniWrite,%LOCATION_UTORRENT%,%IniLocation%,programLocation,uTorrent
+	IniWrite,%LOCATION_DELUGE%,%IniLocation%,programLocation,deluge
 	;IniWrite,--,%IniLocation%,programLocation,bittorrent
 	;IniWrite,--,%IniLocation%,programLocation,popcorntime
 }
