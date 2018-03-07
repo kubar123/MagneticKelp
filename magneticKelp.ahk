@@ -155,10 +155,10 @@ makeSettingsWindow(){
 	Gui 3:Add, Button, gBtnAssTorrent x24 y297 w122 h23, Associate .torrent files
 	Gui 3:Add, DropDownList, vOpenOnMonitor x120 y232 w48
 	Gui 3:Add, Text, x24 y232 w88 h23 +0x200, Open on monitor:
-	Gui 3:Add, CheckBox, x24 y161 w215 h23 +Disabled, End peerflix stream on exit of player
+	Gui 3:Add, CheckBox, gBtnEndStream vBtnEndStream x24 y161 w215 h23, End peerflix stream on exit of player
 	Gui 3:Add, Text, x24 y280 w280 h17, You can associate files to be opened with this application.
 
-	Gui 3:Add, Edit, x145 y186 w51 h21 +Number Center, 45
+	Gui 3:Add, Edit, vTxtTimeout x145 y186 w51 h21 +Number Center, 45
 	Gui 3:Add, Text, x24 y186 w120 h23 +0x200, No player found timeout:
 	Gui 3:Add, Text, x199 y186 w66 h23 +0x200, Seconds
 
@@ -384,6 +384,8 @@ BtnPopcorntime:
 ; TODO ... Popcorntime (opening arguments issue)
 	Return
 
+BtnEndStream:
+	return
 
 
 ;----------------------------Settings -------------------------------
@@ -437,7 +439,9 @@ BtnSettingsOk:
 	;-----------Desktop ------------------------------
 	IniWrite,%ReuseCmd%,%IniLocation%,Defaults,reuseCmd
 	;TODO Close media on Exit
-	;End peerflix stream on Exit
+	;End peerflix stream on Exit of player:
+	IniWrite, %BtnEndStream%, %IniLocation%,Defaults,endStream
+	iniWrite,%TxtTimeout%,%IniLocation%,Defaults,timeout
 	;Open to mouse Cursor
 	IniWrite,%OpenOnMonitor%,%IniLocation%,Defaults,defaultMonitor
 
@@ -563,7 +567,8 @@ makeIniFile(){
 	;-----------Desktop ------------------------------
 	IniWrite,1,%IniLocation%,Defaults,reuseCmd
 	;TODO Close media on Exit
-	;End peerflix stream on Exit
+	IniWrite,0, %IniLocation%,Defaults,endStream
+	iniWrite,45,%IniLocation%,Defaults,timeout
 	;Open to mouse Cursor
 	IniWrite,1,%IniLocation%,Defaults,defaultMonitor
 	IniWrite,`n,%IniLocation%, Defaults, `n
@@ -643,6 +648,9 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 	; ---- check to see if last PID (cmd window) is still open
 	IniRead, lastPid, %IniLocation%, Peerflix, lastPID
 	IniRead, reuseCmd, %IniLocation%, Defaults, reuseCmd
+	IniRead, endStream, %IniLocation%,Defaults,endStream
+	IniRead, timeout, %IniLocation%,Defaults,timeout
+
 
 ;TODO new line brackets forced? Error on inline brackets
 	;MsgBox %reuseCmd%
@@ -687,16 +695,20 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 	;____________________________________________
 
 	; ------------------------------------------------------------------------------------------------------------
-	;wait 30 secs to attach to process
-	; sleep, 30000
-	; WinGet, playerPID,PID, http://localhost:8888/ - PotPlayer
-	; if (!playerPID){
-	; 	msgbox player not found!
-	; 	ExitApp
+
+	; if(endStream){
+	; ;wait 30 secs to attach to process
+	; 	sleep, timeout
+	; 	WinGet, playerPID,PID, http://localhost:8888/ - PotPlayer
+	; 	if (!playerPID){
+	; 		msgbox player not found!
+	; 		ExitApp
+	; 	}
+	; 	WinWaitClose, ahk_pid %playerPID%
+	; 	WinClose,ahk_pid %lastPid%,,,,
+	; 	msgbox end of stream@
+
 	; }
-	; WinWaitClose, ahk_pid %playerPID%
-	; WinClose,ahk_pid %lastPid%,,,,
-	; msgbox end of stream@
 }
 
 
@@ -773,6 +785,14 @@ populateSettingsFromFile(){
     IniRead, ReuseCmd, %IniLocation%, defaults, reuseCmd
     GuiControl,3:,ReuseCmd,%ReuseCmd%
     
+    ;end peerflix stream on exit of player
+    iniRead, endStream, %IniLocation%,defaults, endStream
+    GuiControl,3:,BtnEndStream, %endStream%
+
+    ;Timeout
+    iniRead,timeout,%IniLocation%,defaults,timeout
+    GuiControl,3:,TxtTimeout,%timeout%
+
     ;Calculate the amount of screens, and populate the GUI comboBox
     SysGet,countMonitor,MonitorCount
     Loop, %countMonitor%{   ;populate dropdowb based on amount of screens
