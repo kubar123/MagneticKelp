@@ -696,19 +696,35 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 
 	; ------------------------------------------------------------------------------------------------------------
 
-	; if(endStream){
-	; ;wait 30 secs to attach to process
-	; 	sleep, timeout
-	; 	WinGet, playerPID,PID, http://localhost:8888/ - PotPlayer
-	; 	if (!playerPID){
-	; 		msgbox player not found!
-	; 		ExitApp
-	; 	}
-	; 	WinWaitClose, ahk_pid %playerPID%
-	; 	WinClose,ahk_pid %lastPid%,,,,
-	; 	msgbox end of stream@
+	if(endStream){
+		IniRead, lastPid, %IniLocation%, Peerflix, lastPID
+		;wait x secs to attach to process
+		timeout:=timeout*1000
+		sleep, timeout
 
-	; }
+
+		playerPID:=""
+		if(Opts = "--potplayer"){
+			WinGet, playerPID,PID, http://localhost:8888/ - PotPlayer
+		}else if(Opts="--vlc"){
+			WinGet, playerPID,PID, http://localhost:8888/ - VLC media player
+		}
+		else{
+			Msgbox End stream not supported with this player.
+			Exitapp
+		}
+
+	
+		
+		if (!playerPID){
+			msgbox player not found!
+			ExitApp
+		}
+		WinWaitClose, ahk_pid %playerPID%
+		WinClose,ahk_pid %lastPid%,,,,
+		msgbox end of stream@
+
+	}
 }
 
 
