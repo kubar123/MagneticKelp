@@ -12,7 +12,7 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
 ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
-PROGRAM_VERSION=0.3.5.0
+PROGRAM_VERSION=0.3.6.4
 GITHUB_API_URL=https://api.github.com/repos/kubar123/magneticKelp/releases/latest
 
 LOCATION_QBIT=C:\Program Files (x86)\qBittorrent\qbittorrent.exe
@@ -145,17 +145,22 @@ makeSettingsWindow(){
 	Gui 3:Add, Text, x24 y80 w80 h23 +0x200, Download:
 	Gui 3:Add, DropDownList, vDefaultSream x112 y56 w170, potplayer|vlc||airplay|mplayer|smplayer|mpv|omx|webplay
 	Gui 3:Add, DropDownList, vDefaultDownload x112 y80 w170, QbitTorrent||μTorrent|Deluge|Bittorrent
+
 	Gui 3:Add, GroupBox, x16 y120 w310 h140, Desktop
 	Gui 3:Add, CheckBox, vReuseCmd x24 y136 w215 h23, Reuse Command Prompt when possible
-	Gui 3:Add, CheckBox, x24 y160 w215 h23 +Disabled, Close media player on exit
-	Gui 3:Add, CheckBox, x24 y208 w215 h23 +Disabled, Open to mouse cursor
+	;Gui 3:Add, CheckBox, x24 y160 w215 h23 +Disabled, Close media player on exit
+	Gui 3:Add, CheckBox, x24 y210 w215 h23 +Disabled, Open to mouse cursor
 	Gui 3:Add, GroupBox, x16 y264 w310 h97, File association
 	Gui 3:Add, Button, gBtnAssMagnet x24 y325 w122 h23 0x50012000, Associate magnet links
 	Gui 3:Add, Button, gBtnAssTorrent x24 y297 w122 h23, Associate .torrent files
 	Gui 3:Add, DropDownList, vOpenOnMonitor x120 y232 w48
 	Gui 3:Add, Text, x24 y232 w88 h23 +0x200, Open on monitor:
-	Gui 3:Add, CheckBox, x24 y184 w215 h23 +Disabled, End peerflix stream on exit of player
+	Gui 3:Add, CheckBox, x24 y161 w215 h23 +Disabled, End peerflix stream on exit of player
 	Gui 3:Add, Text, x24 y280 w280 h17, You can associate files to be opened with this application.
+
+	Gui 3:Add, Edit, x145 y186 w51 h21 +Number Center, 1
+	Gui 3:Add, Text, x24 y186 w120 h23 +0x200, No player found timeout:
+	Gui 3:Add, Text, x199 y186 w66 h23 +0x200, Seconds
 
 ;---------------------	------------	TAB 2
 	Gui 3:Tab, 2
@@ -680,6 +685,18 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 	if List = 0
 		Send peerflix "%MagnetLink%" %Opts% {enter}
 	;____________________________________________
+
+	; ------------------------------------------------------------------------------------------------------------
+	;wait 30 secs to attach to process
+	sleep, 30000
+	WinGet, playerPID,PID, http://localhost:8888/ - PotPlayer
+	if (!playerPID){
+		msgbox player not found!
+		ExitApp
+	}
+	WinWaitClose, ahk_pid %playerPID%
+	WinClose,ahk_pid %lastPid%,,,,
+	msgbox end of stream@
 }
 
 
@@ -770,15 +787,15 @@ populateSettingsFromFile(){
 
 ;-----------Tab 2 ------------------
 	IniRead, DefaultLocation, %IniLocation%, programLocation, qbittorrent
-    GuiControl,3:,Edit1,%DefaultLocation%
-    IniRead, DefaultLocation, %IniLocation%, programLocation, uTorrent
     GuiControl,3:,Edit2,%DefaultLocation%
-    IniRead, DefaultLocation, %IniLocation%, programLocation, deluge
+    IniRead, DefaultLocation, %IniLocation%, programLocation, uTorrent
     GuiControl,3:,Edit3,%DefaultLocation%
-    IniRead, DefaultLocation, %IniLocation%, programLocation, bittorrent
+    IniRead, DefaultLocation, %IniLocation%, programLocation, deluge
     GuiControl,3:,Edit4,%DefaultLocation%
-    IniRead, DefaultLocation, %IniLocation%, programLocation, popcorntime
+    IniRead, DefaultLocation, %IniLocation%, programLocation, bittorrent
     GuiControl,3:,Edit5,%DefaultLocation%
+    IniRead, DefaultLocation, %IniLocation%, programLocation, popcorntime
+    GuiControl,3:,Edit6,%DefaultLocation%
 
 
     return
