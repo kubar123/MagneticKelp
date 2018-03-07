@@ -158,7 +158,7 @@ makeSettingsWindow(){
 	Gui 3:Add, CheckBox, x24 y161 w215 h23 +Disabled, End peerflix stream on exit of player
 	Gui 3:Add, Text, x24 y280 w280 h17, You can associate files to be opened with this application.
 
-	Gui 3:Add, Edit, x145 y186 w51 h21 +Number Center, 1
+	Gui 3:Add, Edit, x145 y186 w51 h21 +Number Center, 45
 	Gui 3:Add, Text, x24 y186 w120 h23 +0x200, No player found timeout:
 	Gui 3:Add, Text, x199 y186 w66 h23 +0x200, Seconds
 
@@ -688,15 +688,15 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 
 	; ------------------------------------------------------------------------------------------------------------
 	;wait 30 secs to attach to process
-	sleep, 30000
-	WinGet, playerPID,PID, http://localhost:8888/ - PotPlayer
-	if (!playerPID){
-		msgbox player not found!
-		ExitApp
-	}
-	WinWaitClose, ahk_pid %playerPID%
-	WinClose,ahk_pid %lastPid%,,,,
-	msgbox end of stream@
+	; sleep, 30000
+	; WinGet, playerPID,PID, http://localhost:8888/ - PotPlayer
+	; if (!playerPID){
+	; 	msgbox player not found!
+	; 	ExitApp
+	; }
+	; WinWaitClose, ahk_pid %playerPID%
+	; WinClose,ahk_pid %lastPid%,,,,
+	; msgbox end of stream@
 }
 
 
