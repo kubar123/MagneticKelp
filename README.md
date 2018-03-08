@@ -21,11 +21,14 @@ Install directory:
 ```
 
 ## Help
-<img align="right" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/mainWindowU.PNG" />
 
-<img align="right" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/settingsWindow1U.PNG" />
+
+<img align="left" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/mainWindowU.PNG" />
+
+<img align="center" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/settingsWindow1U.PNG" />
 
 <img align="right" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/SettingsWindow2u.PNG" />
+
 
 1. The menu. Open settings, or get help information here.
 2. Enable to have the CMD window list all files in the torrent. Useful when streaming from a 'season' torrent.
