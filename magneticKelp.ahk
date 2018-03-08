@@ -12,7 +12,7 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
 ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
-PROGRAM_VERSION=0.3.6.4
+PROGRAM_VERSION=0.4.0
 GITHUB_API_URL=https://api.github.com/repos/kubar123/magneticKelp/releases/latest
 
 LOCATION_QBIT=C:\Program Files (x86)\qBittorrent\qbittorrent.exe
@@ -695,7 +695,7 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 	;____________________________________________
 
 	; ------------------------------------------------------------------------------------------------------------
-
+;---------------------- End stream when player is closed ---------------------------------------------------------
 	if(endStream){
 		IniRead, lastPid, %IniLocation%, Peerflix, lastPID
 		;wait x secs to attach to process
@@ -710,7 +710,7 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 			WinGet, playerPID,PID, http://localhost:8888/ - VLC media player
 		}
 		else{
-			Msgbox End stream not supported with this player.
+			Msgbox,Media player not supported,, End stream not supported with this player.,5
 			Exitapp
 		}
 
@@ -722,8 +722,6 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 		}
 		WinWaitClose, ahk_pid %playerPID%
 		WinClose,ahk_pid %lastPid%,,,,
-		msgbox end of stream@
-
 	}
 }
 
