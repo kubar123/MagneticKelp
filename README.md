@@ -1,42 +1,10 @@
-<img align="right" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/Two.PNG"/>
+## [**Download** latest .exe version](https://github.com/kubar123/MagneticKelp/releases/latest)
+* Drag and drop a .torrent file
+* Drag and drop a magnet link
+* Edit -> Preferences -> Associate magnet/torrent links
 
-# MagneticKelp
+## Streaming torrents
 
-
-
-MagneticKelp is a torrent client manager for windows. It helps with streaming, or downloading a file when you have multiple torrenting clients installed.
-
-<img align="right" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/three.PNG"/>
-
-[**Download** latest version](https://github.com/kubar123/MagneticKelp/releases/latest)
-
-[Streaming torrents with peerflix](https://github.com/kubar123/MagneticKelp#using-magnetickelp-to-stream---peerflix---optional)
-
-Install directory:
-```
-%appdata%\MagneticKelp
-```
-
-<hr>
-
-
-## Install
-### Downloading MagneticKelp
-1. Click the releases tab above, or [**Download** latest version](https://github.com/kubar123/MagneticKelp/releases/latest)
-2. Click the 'MagneticKelp.exe' link under 'Assets'
-<img align="center" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/install-exe.png" />
-
-### Use MagneticKelp for magnet links
-1. Open settings
-2. Under the 'file association' section, click the 'associate magnet links' button
-* The .exe file will be copied to the install directory noted above
-3. Click on a magnet link
-
-*OR*
-1. Drag and drop a magnet link into the window
-
-
-### Streaming - [Peerflix] - Optional
 More information: https://github.com/mafintosh/peerflix
 
 1.  Install Node.js: https://nodejs.org/en/
@@ -45,22 +13,39 @@ More information: https://github.com/mafintosh/peerflix
 npm install -g peerflix
 ```
 
-<hr>
+## Additional Information
 
-## Features
-* Drag and drop a .torrent file into the main window and select to stream/download the file
-* Drag and drop a magnet link into the designated area, and start straming/downloading
-* Choose out of many programs to downlad or stream the content with.
-
-<hr>
+Install directory:
+```
+%appdata%\MagneticKelp
+```
 
 ## Help
-<table>
-  <tr><td>List Files</td><td> Enable if the torrent has multiple files, select the file you wish to stream in the command window with the arrow keys and enter</td></tr>
-  <tr><td>Reuse Command Prompt when possible</td><td>Attempts to reuse the old command prompt window if still open, otherwise opens a new window.</td></tr>
-  <tr><td>Open on monitor</td><td>Opens the application to the center of the monitor.</td></tr>
-</table>
-  
- ### Troubleshooting
-  * Open magneticKelp, open the settings and click the 'associate magnet links'.
-  * Try deleing the install directory noted above, or deleting the settings.ini file.
+<img align="right" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/mainWindowU.PNG" />
+
+<img align="right" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/settingsWindow1U.PNG" />
+
+<img align="right" src="https://github.com/kubar123/MagneticKelp/blob/master/Img/SettingsWindow2u.PNG" />
+
+1. The menu. Open settings, or get help information here.
+2. Enable to have the CMD window list all files in the torrent. Useful when streaming from a 'season' torrent.
+3. Stream. Closes the window, and starts streaming using the player specified in *Section 4*. Requires Peerflix and Node.js to be installed.
+4. Select which player to stream the torrent with.
+5. Enter custom peerflix options
+6. Download with program
+7. Download with selected program in *Section 6*
+8. Drag and drop a magnet link here area.
+9. Settings menu tabs.
+10. The default application that is shown in *Section 4*
+11. The default application that is shown in *Section 6*
+12. Attempts to use the old cmd process if it still exists to stream. Ends old stream and starts a new one in the same CMD window.
+13. The peerflix stream (CMD window) ends when the media player is closed. 
+14. MagneticKelp will wait x seconds before attempting to hook into the media player. If the player has not started to stream when it times out, increase the timeout. Once timed out, magneticKelp will exit, the stream will continue.
+15. Opens the application to where ever the mouse is located.
+16. Opens the application to the center of screen x. The amount of monitors is calculated based on your setup.
+17. Attempts to associate .torrent files with the application. May not always work, best to use the windows 'Open with' and browse to the *install directory* noted above.
+18. Associates magnet links with this application. Copies the application to the *install directory* noted above.
+19. Save the settings button. Some settings may require magneticKelp to restart to be applied.
+20. Cancel settings, discarding any changes. Opens the main window.
+21. Browse to the location of the programs .exe.
+22. Restores the software tab to defaults.
