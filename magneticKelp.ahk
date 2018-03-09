@@ -12,12 +12,14 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
 ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
-PROGRAM_VERSION=0.4.0
+PROGRAM_VERSION=0.4.1
 GITHUB_API_URL=https://api.github.com/repos/kubar123/magneticKelp/releases/latest
 
 LOCATION_QBIT=C:\Program Files (x86)\qBittorrent\qbittorrent.exe
 LOCATION_UTORRENT=%A_AppData%\uTorrent\uTorrent.exe
 LOCATION_DELUGE=C:\Program Files (x86)\Deluge\deluge.exe
+
+
 ;==============================================	/END GLOBAL ==============================
 
 ;---------------------------------- 	MAIN 	-------------------
@@ -220,13 +222,20 @@ ExitApp
 
 ;TODO remove when features working
 betaFeatureDisable(){
-	 GuiControl,Disable, Button7
-	 ;GuiControl,Disable, Button7
-	 ;GuiControl,Disable, Button10
+	GuiControl,Disable, Button7
+	;verify that NPM and peerflix is installed
+	url=%A_Appdata%\npm\node_modules\peerflix2
+	;msgbox %url%
+
+	if(!FileExist(url)){
+	 	GuiControl,Disable, Button1
+	 }
+	;GuiControl,Disable, Button7
+	;GuiControl,Disable, Button10
 }
 
 ;----------------- 
-
+; TODO CSS for html overlay
 
 
 
