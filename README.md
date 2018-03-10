@@ -31,16 +31,16 @@ Install directory:
 
 
 1. The menu. Open settings, or get help information here.
-2. Enable to have the CMD window list all files in the torrent. Useful when streaming from a 'season' torrent.
-3. Stream. Closes the window, and starts streaming using the player specified in *Section 4*. Requires Peerflix and Node.js to be installed.
+2. Enable to have the CMD window list all files in the torrent. Useful when streaming from a 'season' torrent. Use the arrow and enter keys to select the torrent you wish to stream.
+3. Stream. Closes the window, and starts streaming using the player specified in *Section 4*. Requires Peerflix and Node.js to be installed. May be disabled if Peerflix is not installed.
 4. Select which player to stream the torrent with.
-5. Enter custom peerflix options
-6. Download with program
-7. Download with selected program in *Section 6*
-8. Drag and drop a magnet link here area.
+5. Enter custom peerflix options.
+6. Select which program to download the torrent with.
+7. Download with selected program in *Section 6*.
+8. Drag and drop a magnet link into the area. Torrent will be loaded, select the stream/download buttons.
 9. Settings menu tabs.
-10. The default application that is shown in *Section 4*
-11. The default application that is shown in *Section 6*
+10. The default application that is shown in *Section 4* by default when the program opens.
+11. The default application that is shown in *Section 6* by default when the program opens.
 12. Attempts to use the old cmd process if it still exists to stream. Ends old stream and starts a new one in the same CMD window.
 13. The peerflix stream (CMD window) ends when the media player is closed. 
 14. MagneticKelp will wait x seconds before attempting to hook into the media player. If the player has not started to stream when it times out, increase the timeout. Once timed out, magneticKelp will exit, the stream will continue.
