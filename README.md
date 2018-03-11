@@ -43,7 +43,7 @@ Install directory:
 11. The default application that is shown in *Section 6* by default when the program opens.
 12. Attempts to use the old cmd process if it still exists to stream. Ends old stream and starts a new one in the same CMD window.
 13. The peerflix stream (CMD window) ends when the media player is closed. 
-14. MagneticKelp will wait x seconds before attempting to hook into the media player. If the player has not started to stream when it times out, increase the timeout. Once timed out, magneticKelp will exit, the stream will continue.
+14. MagneticKelp will wait x seconds before attempting to hook into the media player. If the player has not started to stream when it times out, magneticKelp will exit, the stream will continue.
 15. Opens the application to where ever the mouse is located.
 16. Opens the application to the center of screen x. The amount of monitors is calculated based on your setup.
 17. Attempts to associate .torrent files with the application. May not always work, best to use the windows 'Open with' and browse to the *install directory* noted above.
