@@ -224,7 +224,7 @@ ExitApp
 betaFeatureDisable(){
 	GuiControl,Disable, Button7
 	;verify that NPM and peerflix is installed
-	url=%A_Appdata%\npm\node_modules\peerflix2
+	url=%A_Appdata%\npm\node_modules\peerflix
 	;msgbox %url%
 
 	if(!FileExist(url)){
@@ -534,9 +534,6 @@ IE_BeforeNavigate2(p*) {
 	}
  	NumPut(true, ComObjValue(p.7))
 
- ; MsgBox % p.2
- 	
- 	;animateTorrentLoaded(1)
 }
 
 
@@ -545,9 +542,11 @@ IE_BeforeNavigate2(p*) {
 ;Setting 2 = Torrent warning. Loaded, but does not appear to be a valid torrent
 animateTorrentLoaded(setting=0){
 	Global
+	;flicker the GUI, simple animation, not needed
 	Gui 1:Hide
  	sleep, 50
  	Gui 1:Show
+
  	if(setting=1){
 	 	html.="<script>document.getElementById('mainText').innerHTML='Torrent loaded';</script>"
 	 	html.="<style>body {border-color:#0080ff; border-width: 2px;}</style>"
@@ -612,22 +611,17 @@ assignMagnetLink(){
 
 firstTimeCheck(){
 	Global
-	;MsgBox, %location%
-	;see if Update
-	;Msgbox %1%
+	; ------- check in case app is restarting (eg due to update, but app was not admin)
 	if (1 >< shortCutAddition)
 		addShortcutsToStartMenu()
 	if (1 >< update)
 		runBatch()
-		;msgBox verified update
-	; if(1="update")
-	; {
 		
-	; }
-
+	;ensure that the settings.ini file exists.
 	IfNotExist, %IniLocation%
 		notFirstTime()
-    ;check if program is up to date
+
+    ;check if program is up to date, if not we want a copy of the program in the install location. (update)
     IniRead, lastVerRan, %IniLocation%, Defaults, LastVersionRan
     if(lastVerRan < PROGRAM_VERSION){
     	MsgBox,64,Updated,You are running a new version of the application.`nMagneticKelp has been updated.
@@ -686,7 +680,7 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 		
 	}
 
-	;Return
+
 
 	
 	; ---- TODO -------
@@ -735,21 +729,6 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 }
 
 
-
-;convert text into switch for peerflix stream
-; currently unneeded - only use when "--" + ComboBox value does not make correct option
-
-;getSwitchUsing(textInfo="error"){
-;	;MsgBox inside switch %textInfo%
-;	;MsgBox, % textInfo
-;	if (textInfo = "omx")
-;		return "--omx"
-;	if textInfo = "error"
-;		MsgBox "Error"
-;	if (textInfo="potplayer")
-;		return "--potplayer"
-;}
-;
 
 ;centers the window to the middle of the 'default monitor'
 centerWindow(WinTitle=""){
@@ -857,7 +836,7 @@ addShortcutsToStartMenu()
 return
 addShortcutsToStartMenu(){
 	Global
-
+	;ensure the user is an admin, otherwise run the app again as admin
 	if(!A_IsAdmin){
 		Run *RunAs "%A_ScriptFullPath%" "shortCutAddition"
 		ExitApp
