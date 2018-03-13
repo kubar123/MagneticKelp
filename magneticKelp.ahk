@@ -18,7 +18,7 @@ GITHUB_API_URL=https://api.github.com/repos/kubar123/magneticKelp/releases/lates
 LOCATION_QBIT=C:\Program Files (x86)\qBittorrent\qbittorrent.exe
 LOCATION_UTORRENT=%A_AppData%\uTorrent\uTorrent.exe
 LOCATION_DELUGE=C:\Program Files (x86)\Deluge\deluge.exe
-
+LOCATION_BITTORRENT=%A_Appdata%\BitTorrent\BitTorrent.exe
 
 ;==============================================	/END GLOBAL ==============================
 
