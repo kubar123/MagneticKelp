@@ -1,12 +1,11 @@
 ## [**Download** latest .exe version](https://github.com/kubar123/MagneticKelp/releases/latest)
-* Drag and drop a .torrent file
-* Drag and drop a magnet link
+* Drag and drop .torrent files
+* Drag and drop magnet links
 * Edit -> Preferences -> Associate magnet/torrent links
 
 ## Streaming torrents
 
 More information: https://github.com/mafintosh/peerflix
-
 1.  Install Node.js: https://nodejs.org/en/
 2.  Install Peerflix - in a command window enter:
 ```
@@ -52,3 +51,10 @@ Install directory:
 20. Cancel settings, discarding any changes. Opens the main window.
 21. Browse to the location of the programs .exe.
 22. Restores the software tab to defaults.
+
+## FAQ
+*Q.'ERROR' is shown in the settings -> software*.  
+A. Click the 'defaults' button and restart the app. If the issue persists delete the settings.ini file in the install directory noted above.
+
+*Q. I cannot click on the stream button, it is disabled.*  
+A. Peerflix was not found, see instructions above to install the streaming component.
