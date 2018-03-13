@@ -1,6 +1,9 @@
 ## [**Download** latest .exe version](https://github.com/kubar123/MagneticKelp/releases/latest)
-* Drag and drop .torrent files
-* Drag and drop magnet links
+* Under 'assets' click the magneticKelp.exe link
+* Your antivirus might quarantine the application
+
+
+* Drag and drop .torrent files or magnet links
 * Edit -> Preferences -> Associate magnet/torrent links
 
 ## Streaming torrents
