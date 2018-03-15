@@ -112,7 +112,7 @@ makeMainWindow(){
 	html.="</head><body><div id='mainText' unselectable='on' onContextMenu='return false;'>"
 	;html.="<div onContentMenu='return false;'><img onContentMenu='return false;' width='300' height='60' src='D:\OneDrive\git\MagneticKelp\download.png'/>"
 	;check to see if magnet link is already loaded
-	if(%1% =="")
+	if(1)
 		html.="Drop magnet links here"
 	else 
 		html.="Magnet Loaded"
