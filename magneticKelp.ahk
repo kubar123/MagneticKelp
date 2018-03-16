@@ -204,7 +204,7 @@ makeSettingsWindow(){
 	Gui 3:add, Text,  x24 y107 w120 h23, No player found timeout:
 	Gui 3:add, Text, x200 y107 w66 h23, Seconds
 	Gui 3:Add, GroupBox, x16 y40 w310 h140, Desktop
-	Gui 3:add, CheckBox, vIsStreamDisabledCheck x24 y128 w209 h23 +Disabled, Disable streaming button when peerflix is not installed
+	Gui 3:add, CheckBox, vIsStreamDisabledCheck x24 y128 w209 h23, Disable streaming button when peerflix is not installed
 	Gui 3:add, CheckBox, vIsTottrntHistoryDisabled x24 y152 w210 h23 +Disabled, Disable torrent history
 
 
@@ -247,9 +247,10 @@ betaFeatureDisable(){
 	;verify that NPM and peerflix is installed
 	url=%A_Appdata%\npm\node_modules\peerflix
 	;msgbox %url%
-
 	if(!FileExist(url)){
-	 	GuiControl,Disable, Button1
+		IniRead,isStreamCheck,%IniLocation%,defaults,streamInstalledCheck
+		if(%isStreamCheck%)
+	 		GuiControl,Disable, Button1
 	 }
 	;GuiControl,Disable, Button7
 	;GuiControl,Disable, Button10
@@ -480,7 +481,7 @@ BtnSettingsOk:
 	iniWrite,%TxtTimeout%,%IniLocation%,Defaults,timeout
 	;TODO Close media on Exit
 	;End peerflix stream on Exit of player:
-	
+	IniWrite,%isStreamDisabledCheck%,%IniLocation%,defaults,streamInstalledCheck
 	;Open to mouse Cursor
 	
 
@@ -593,6 +594,7 @@ animateTorrentLoaded(setting=0){
 makeIniFile(){
 	Global
 
+	IniWrite,1,%IniLocation%,defaults,streamInstalledCheck
 	;--------Selected By default ---------------------
 	IniWrite,vlc,%IniLocation%,Defaults,DefaultStreamer
 	iniWrite,qbittorrent ,%IniLocation%,Defaults,defaultDownloader
@@ -854,6 +856,9 @@ populateSettingsFromFile(){
     iniRead,timeout,%IniLocation%,defaults,timeout
     GuiControl,3:,TxtTimeout,%timeout%
 
+	;IniWrite,%isStreamDisabledCheck%,%IniLocation%,defaults,streamInstalledCheck
+    IniRead,isStreamCheck,%IniLocation%,defaults,streamInstalledCheck
+    GuiControl,3:,IsStreamDisabledCheck,%isStreamCheck%
     ;TODO Disable stream button when peerflix not #Install
    	;TODO Disable torrent history
     return
