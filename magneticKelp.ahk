@@ -598,7 +598,7 @@ makeIniFile(){
 	iniWrite,qbittorrent ,%IniLocation%,Defaults,defaultDownloader
 	IniWrite,%PROGRAM_VERSION%,%IniLocation%,Defaults,LastVersionRan
 
-	IniWrite,%IsUpdateOnStartup%, %IniLocation%, Defaults, startupUpdateCheck
+	IniWrite,1, %IniLocation%, Defaults, startupUpdateCheck
 
 	;-----------Desktop ------------------------------
 	IniWrite,1,%IniLocation%,Defaults,reuseCmd
@@ -802,10 +802,6 @@ populateSettingsFromFile(){
 	centerWindow("Settings")
 
 ;-----------Tab 1 ------------------
-
-	IniRead, updateOnStartup,%IniLocation%,defaults,startupUpdateCheck
-    GuiControl,3:,IsUpdateOnStartup,%updateOnStartup%
-
 	IniRead, DefaultStreamComboBox, %IniLocation%, defaults, defaultStreamer
     GuiControl,3:ChooseString,ComboBox1,%DefaultStreamComboBox%
     
@@ -814,18 +810,9 @@ populateSettingsFromFile(){
 		GuiControl,3:Choose,ComboBox2,2	;2nd option = 
 	else
 		GuiControl,3:ChooseString,ComboBox2,%DefaultDlComboBox%
-    ;GuiControl,3:ChooseString,ComboBox2,%DefaultDlComboBox%
-	;Reuse CMD
-    IniRead, ReuseCmd, %IniLocation%, defaults, reuseCmd
-    GuiControl,3:,ReuseCmd,%ReuseCmd%
-    
-    ;end peerflix stream on exit of player
-    iniRead, endStream, %IniLocation%,defaults, endStream
-    GuiControl,3:,BtnEndStream, %endStream%
 
-    ;Timeout
-    iniRead,timeout,%IniLocation%,defaults,timeout
-    GuiControl,3:,TxtTimeout,%timeout%
+
+	;TODO OPEN TO MOUSE Cursor
 
     ;Calculate the amount of screens, and populate the GUI comboBox
     SysGet,countMonitor,MonitorCount
@@ -833,10 +820,12 @@ populateSettingsFromFile(){
         ;MsgBox Monitor # %A_Index%
         GuiControl,3:,ComboBox3,%A_Index%
     }  
-    
     ;select default screen
   	IniRead, DefaultMonitor, %IniLocation%, defaults, defaultMonitor
    	GuiControl,3:ChooseString,ComboBox3,%DefaultMonitor%
+
+   	IniRead, updateOnStartup,%IniLocation%,defaults,startupUpdateCheck
+    GuiControl,3:,IsUpdateOnStartup,%updateOnStartup%
 
 
 ;-----------Tab 2 ------------------
@@ -852,6 +841,21 @@ populateSettingsFromFile(){
     GuiControl,3:,TxtPopcorntime,%DefaultLocation%
 
 
+
+;----------------TAB 3 -------------
+	IniRead, ReuseCmd, %IniLocation%, defaults, reuseCmd
+    GuiControl,3:,ReuseCmd,%ReuseCmd%
+
+     ;end peerflix stream on exit of player
+    iniRead, endStream, %IniLocation%,defaults, endStream
+    GuiControl,3:,BtnEndStream, %endStream%
+
+    ;Timeout
+    iniRead,timeout,%IniLocation%,defaults,timeout
+    GuiControl,3:,TxtTimeout,%timeout%
+
+    ;TODO Disable stream button when peerflix not #Install
+   	;TODO Disable torrent history
     return
 }
 
