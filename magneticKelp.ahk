@@ -157,7 +157,7 @@ makeSettingsWindow(){
 	Gui 3:Add, Button, gBtnAssTorrent x24 y248 w122 h23, Associate .torrent files
 	Gui 3:Add, DropDownList, vOpenOnMonitor x120 y160 w48
 	Gui 3:Add, Text, x24 y160 w88 h23 +0x200, Open on monitor:
-	Gui 3:Add, CheckBox, x24 y184 w165 h23, Check for updates at startup
+	Gui 3:Add, CheckBox, x24 y184 w165 h23 +Disabled, Check for updates at startup
 	;Gui 3:Add, CheckBox, gBtnEndStream vBtnEndStream x24 y161 w215 h23, End peerflix stream on exit of player
 	Gui 3:Add, Text, x24 y232 w280 h17, You can associate files to be opened with this application.
 
@@ -200,8 +200,8 @@ makeSettingsWindow(){
 	Gui 3:add, Text,  x24 y107 w120 h23, No player found timeout:
 	Gui 3:add, Text, x200 y107 w66 h23, Seconds
 	Gui 3:Add, GroupBox, x16 y40 w310 h140, Desktop
-	Gui 3:add, CheckBox, vIsStreamDisabledCheck x24 y128 w209 h23, Disable streaming button when peerflix is not installed
-	Gui 3:add, CheckBox, vIsTottrntHistoryDisabled x24 y152 w210 h23, Disable torrent history
+	Gui 3:add, CheckBox, vIsStreamDisabledCheck x24 y128 w209 h23 +Disabled, Disable streaming button when peerflix is not installed
+	Gui 3:add, CheckBox, vIsTottrntHistoryDisabled x24 y152 w210 h23 +Disabled, Disable torrent history
 
 
 
