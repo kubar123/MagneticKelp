@@ -12,7 +12,7 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
 ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
-PROGRAM_VERSION=0.4.1
+PROGRAM_VERSION=0.4.2
 GITHUB_API_URL=https://api.github.com/repos/kubar123/magneticKelp/releases/latest
 
 LOCATION_QBIT=C:\Program Files (x86)\qBittorrent\qbittorrent.exe
@@ -23,9 +23,13 @@ LOCATION_BITTORRENT=%A_Appdata%\BitTorrent\BitTorrent.exe
 ;==============================================	/END GLOBAL ==============================
 
 ;---------------------------------- 	MAIN 	-------------------
+
 makeMainWindow()
 ;checkForNewVersions()
-
+IniRead, updateOnStartup,%IniLocation%,defaults,startupUpdateCheck
+if(updateOnStartup){
+	checkForNewVersions(1)
+}
 ;addShortcutsToStartMenu()
 firstTimeCheck()	
 
@@ -157,7 +161,7 @@ makeSettingsWindow(){
 	Gui 3:Add, Button, gBtnAssTorrent x24 y248 w122 h23, Associate .torrent files
 	Gui 3:Add, DropDownList, vOpenOnMonitor x120 y160 w48
 	Gui 3:Add, Text, x24 y160 w88 h23 +0x200, Open on monitor:
-	Gui 3:Add, CheckBox, x24 y184 w165 h23 +Disabled, Check for updates at startup
+	Gui 3:Add, CheckBox,vIsUpdateOnStartup x24 y184 w165 h23 , Check for updates at startup
 	;Gui 3:Add, CheckBox, gBtnEndStream vBtnEndStream x24 y161 w215 h23, End peerflix stream on exit of player
 	Gui 3:Add, Text, x24 y232 w280 h17, You can associate files to be opened with this application.
 
@@ -455,26 +459,33 @@ BtnAssMagnet:
 ;-------- Save settings button ----------------------
 BtnSettingsOk:
 	Gui, 3:Submit,
-
-	;--------Selected By default ---------------------
+	;-------------TAB 1------------------------------
 	IniWrite,%DefaultSream%,%IniLocation%,Defaults,defaultStreamer
 	iniWrite,%DefaultDownload%,%IniLocation%,Defaults,defaultDownloader
 
-	;-----------Desktop ------------------------------
-	IniWrite,%ReuseCmd%,%IniLocation%,Defaults,reuseCmd
-	;TODO Close media on Exit
-	;End peerflix stream on Exit of player:
-	IniWrite, %BtnEndStream%, %IniLocation%,Defaults,endStream
-	iniWrite,%TxtTimeout%,%IniLocation%,Defaults,timeout
-	;Open to mouse Cursor
+	IniWrite,%IsUpdateOnStartup%, %IniLocation%, Defaults, startupUpdateCheck
+
 	IniWrite,%OpenOnMonitor%,%IniLocation%,Defaults,defaultMonitor
 
-	;------------------[TAB 2]____Software Tab-------
+	;--------TAB 2 SOFTWARE --------------------------
 	IniWrite,%TxtQbitTorrent%,%IniLocation%,programLocation,qbittorrent
 	IniWrite,%TxtUTorrent%,%IniLocation%,programLocation,uTorrent
 	IniWrite,%TxtDeluge%,%IniLocation%,programLocation,deluge
 	IniWrite,%TxtBittorrent%,%IniLocation%,programLocation,bittorrent
 
+
+	;-----------TAB 3 - Desktop ----------------------
+	IniWrite,%ReuseCmd%,%IniLocation%,Defaults,reuseCmd
+	IniWrite,%BtnEndStream%, %IniLocation%,Defaults,endStream
+	iniWrite,%TxtTimeout%,%IniLocation%,Defaults,timeout
+	;TODO Close media on Exit
+	;End peerflix stream on Exit of player:
+	
+	;Open to mouse Cursor
+	
+
+	;------------------[TAB 2]____Software Tab-------
+	
 	;TxtPopcorntime
 
 	;---Actions------
@@ -586,6 +597,8 @@ makeIniFile(){
 	IniWrite,vlc,%IniLocation%,Defaults,DefaultStreamer
 	iniWrite,qbittorrent ,%IniLocation%,Defaults,defaultDownloader
 	IniWrite,%PROGRAM_VERSION%,%IniLocation%,Defaults,LastVersionRan
+
+	IniWrite,%IsUpdateOnStartup%, %IniLocation%, Defaults, startupUpdateCheck
 
 	;-----------Desktop ------------------------------
 	IniWrite,1,%IniLocation%,Defaults,reuseCmd
@@ -789,6 +802,10 @@ populateSettingsFromFile(){
 	centerWindow("Settings")
 
 ;-----------Tab 1 ------------------
+
+	IniRead, updateOnStartup,%IniLocation%,defaults,startupUpdateCheck
+    GuiControl,3:,IsUpdateOnStartup,%updateOnStartup%
+
 	IniRead, DefaultStreamComboBox, %IniLocation%, defaults, defaultStreamer
     GuiControl,3:ChooseString,ComboBox1,%DefaultStreamComboBox%
     
@@ -877,8 +894,9 @@ addShortcutsToStartMenu(){
 
 
 
-checkForNewVersions(){
+checkForNewVersions(silent=0){
 	Global
+
 	;find latest released version
 	whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
 	whr.open("GET",GITHUB_API_URL,true)
@@ -912,7 +930,8 @@ checkForNewVersions(){
 		IfMsgBox No
 			return
 	}if(PROGRAM_VERSION>=latestVersionNo){
-		MsgBox,262144,, You are running the latest version
+		if(!silent)
+			MsgBox,262144,, You are running the latest version
 		return 0
 	}
 
