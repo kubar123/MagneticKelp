@@ -138,7 +138,7 @@ makeSettingsWindow(){
 	Gui 3:-MinimizeBox -MaximizeBox +AlwaysOnTop 
 	Gui 3:Add, Button, gBtnSettingsCancel x256 y368 w80 h23, Cancel
 	Gui 3:Add, Button, gBtnSettingsOk x168 y368 w80 h23, &OK
-	Gui 3:Add, Tab3, x8 y8 w336 h359, Behavior||Software
+	Gui 3:Add, Tab3, x8 y8 w336 h359, Defaults||Software|Desktop
 
 ;----------------------- ---------- 	TAB 1
 	Gui 3:Tab, 1
@@ -148,26 +148,27 @@ makeSettingsWindow(){
 	Gui 3:Add, DropDownList, vDefaultSream x112 y56 w170, potplayer|vlc||airplay|mplayer|smplayer|mpv|omx|webplay
 	Gui 3:Add, DropDownList, vDefaultDownload x112 y80 w170, QbitTorrent||μTorrent|Deluge|Bittorrent
 
-	Gui 3:Add, GroupBox, x16 y120 w310 h140, Desktop
-	Gui 3:Add, CheckBox, vReuseCmd x24 y136 w215 h23, Reuse Command Prompt when possible
+	Gui 3:Add, GroupBox, x16 y120 w310 h92, MagneticKelp
+	;Gui 3:Add, CheckBox, vReuseCmd x24 y136 w215 h23, Reuse Command Prompt when possible
 	;Gui 3:Add, CheckBox, x24 y160 w215 h23 +Disabled, Close media player on exit
-	Gui 3:Add, CheckBox, x24 y210 w215 h23 +Disabled, Open to mouse cursor
-	Gui 3:Add, GroupBox, x16 y264 w310 h97, File association
-	Gui 3:Add, Button, gBtnAssMagnet x24 y325 w122 h23 0x50012000, Associate magnet links
-	Gui 3:Add, Button, gBtnAssTorrent x24 y297 w122 h23, Associate .torrent files
-	Gui 3:Add, DropDownList, vOpenOnMonitor x120 y232 w48
-	Gui 3:Add, Text, x24 y232 w88 h23 +0x200, Open on monitor:
-	Gui 3:Add, CheckBox, gBtnEndStream vBtnEndStream x24 y161 w215 h23, End peerflix stream on exit of player
-	Gui 3:Add, Text, x24 y280 w280 h17, You can associate files to be opened with this application.
+	Gui 3:Add, CheckBox, x24 y136 w215 h23 +Disabled, Open to mouse cursor
+	Gui 3:Add, GroupBox, x16 y216 w310 h97, File association
+	Gui 3:Add, Button, gBtnAssMagnet x24 y280 w122 h23 0x50012000, Associate magnet links
+	Gui 3:Add, Button, gBtnAssTorrent x24 y248 w122 h23, Associate .torrent files
+	Gui 3:Add, DropDownList, vOpenOnMonitor x120 y160 w48
+	Gui 3:Add, Text, x24 y160 w88 h23 +0x200, Open on monitor:
+	Gui 3:Add, CheckBox, x24 y184 w165 h23, Check for updates at startup
+	;Gui 3:Add, CheckBox, gBtnEndStream vBtnEndStream x24 y161 w215 h23, End peerflix stream on exit of player
+	Gui 3:Add, Text, x24 y232 w280 h17, You can associate files to be opened with this application.
 
-	Gui 3:Add, Edit, vTxtTimeout x145 y186 w51 h21 +Number Center, 45
-	Gui 3:Add, Text, x24 y186 w120 h23 +0x200, No player found timeout:
-	Gui 3:Add, Text, x199 y186 w66 h23 +0x200, Seconds
+	;Gui 3:Add, Edit, vTxtTimeout x145 y186 w51 h21 +Number Center, 45
+	;Gui 3:Add, Text, x24 y186 w120 h23 +0x200, No player found timeout:
+	;Gui 3:Add, Text, x199 y186 w66 h23 +0x200, Seconds
 
 ;---------------------	------------	TAB 2
 	Gui 3:Tab, 2
 	Gui 3:Add, GroupBox, x16 y40 w310 h187, Program directory location
-	Gui 3:Add, Edit, vTxtQbitTorrent x88 y60 w192 h15 -0x800000 -E0x20201 +ReadOnly, ---
+	Gui 3:Add, Edit,  vTxtQbitTorrent x88 y60 w192 h15 -0x800000 -E0x20201 +ReadOnly, ---
 	Gui 3:Add, Text, x24 y60 w62 h13 +0x200, Qbittorrent:
 	Gui 3:Add, Button, gBtnQbitSelect x296 y60 w18 h18, ...
 	Gui 3:Add, Text, x24 y84 w62 h13 +0x200, μTorrent:
@@ -188,6 +189,22 @@ makeSettingsWindow(){
 	Gui 3:Add, Text, x88 y148 w196 h2 0x10
 	Gui 3:Add, Text, x88 y172 w196 h2 0x10
 	Gui 3:Add, Button, gBtnResetDefault x24 y194 w80 h23, Defaults
+
+
+
+;----------------------------------- TAB 3
+	Gui 3:Tab, 3
+	Gui 3:add, CheckBox, vReuseCmd x24 y56 w215 h23 +Checked, Reuse Command Prompt when possible
+	Gui 3:add, CheckBox, vBtnEndStream x24 y80 w215 h23 +Checked, End peerflix stream on exit of player
+	Gui 3:add, Edit, vTxtTimeout +Number Center x144 y104 w51 h21, 35
+	Gui 3:add, Text,  x24 y107 w120 h23, No player found timeout:
+	Gui 3:add, Text, x200 y107 w66 h23, Seconds
+	Gui 3:Add, GroupBox, x16 y40 w310 h140, Desktop
+	Gui 3:add, CheckBox, vIsStreamDisabledCheck x24 y128 w209 h23, Disable streaming button when peerflix is not installed
+	Gui 3:add, CheckBox, vIsTottrntHistoryDisabled x24 y152 w210 h23, Disable torrent history
+
+
+
 
 	Gui 3:Show, x-500 y-500 w356 h396, Settings
 }
@@ -393,8 +410,6 @@ BtnPopcorntime:
 ; TODO ... Popcorntime (opening arguments issue)
 	Return
 
-BtnEndStream:
-	return
 
 
 ;----------------------------Settings -------------------------------
@@ -636,7 +651,7 @@ firstTimeCheck(){
 notFirstTime(){
 	makeIniFile()
 ;Assign as default magnet link check
-	Msgbox, 262180,use for magnet links?, This appears to be your first time running this application. Set MagneticKelp to be the default application for magnet links?
+	Msgbox, 262180,Use for magnet links?, This appears to be your first time running this application. Set MagneticKelp to be the default application for magnet links?
 	IfMsgBox No
 		return
 	ifMsgBox Yes
@@ -809,15 +824,15 @@ populateSettingsFromFile(){
 
 ;-----------Tab 2 ------------------
 	IniRead, DefaultLocation, %IniLocation%, programLocation, qbittorrent
-    GuiControl,3:,Edit2,%DefaultLocation%
+    GuiControl,3:,TxtQbitTorrent,%DefaultLocation%
     IniRead, DefaultLocation, %IniLocation%, programLocation, uTorrent
-    GuiControl,3:,Edit3,%DefaultLocation%
+    GuiControl,3:,TxtUtorrent,%DefaultLocation%
     IniRead, DefaultLocation, %IniLocation%, programLocation, deluge
-    GuiControl,3:,Edit4,%DefaultLocation%
+    GuiControl,3:,TxtDeluge,%DefaultLocation%
     IniRead, DefaultLocation, %IniLocation%, programLocation, bittorrent
-    GuiControl,3:,Edit5,%DefaultLocation%
+    GuiControl,3:,TxtBittorrent,%DefaultLocation%
     IniRead, DefaultLocation, %IniLocation%, programLocation, popcorntime
-    GuiControl,3:,Edit6,%DefaultLocation%
+    GuiControl,3:,TxtPopcorntime,%DefaultLocation%
 
 
     return
