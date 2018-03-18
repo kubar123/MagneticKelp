@@ -446,7 +446,7 @@ BtnPopcorntime:
 
 BtnReloadTorrent:
 IniRead, isHistoryEnabled, %IniLocation%, defaults, enableHistory
-msgbox %isHistoryEnabled%
+;msgbox %isHistoryEnabled%
 if(isHistoryEnabled){
 	IniRead, lastTorrent, %IniLocation%, defaults, lastTorrent,null
 	if(lastTorrent!="null"){
