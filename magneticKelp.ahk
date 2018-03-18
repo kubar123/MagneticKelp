@@ -12,7 +12,7 @@ MouseGetPos, OutputVarX, OutputVarY			;Mouse position
 ;APP_FOLDER_LOCATION:=%A_AppData%
 IniLocation= %A_AppData%\magneticKelp\settings.ini
 ExeLocation=%A_AppData%\magneticKelp\magneticKelp.exe
-PROGRAM_VERSION=0.4.2
+PROGRAM_VERSION=0.5.0
 GITHUB_API_URL=https://api.github.com/repos/kubar123/magneticKelp/releases/latest
 
 LOCATION_QBIT=C:\Program Files (x86)\qBittorrent\qbittorrent.exe
@@ -26,19 +26,25 @@ LOCATION_BITTORRENT=%A_Appdata%\BitTorrent\BitTorrent.exe
 
 makeMainWindow()
 ;checkForNewVersions()
+populateFromFile()
+;addShortcutsToStartMenu()
+firstTimeCheck()	
+
+betaFeatureDisable()
 IniRead, updateOnStartup,%IniLocation%,defaults,startupUpdateCheck
 if(updateOnStartup){
 	checkForNewVersions(1)
 }
-;addShortcutsToStartMenu()
-firstTimeCheck()	
 
-populateFromFile()
+	;IniRead, lastTorrent, %IniLocation%, defaults, lastTorrent,null
+	;if(lastTorrent!="null")
+	;1=%lastTorrent%
+
 
 ; IfNotExist, %IniLocation%
 ; 	makeIniFile()
 
-betaFeatureDisable()
+
 return
 ; -----------------------------------------------------------------
 
@@ -53,6 +59,7 @@ menuHandler:
 ;menuPreferences:
 editMenu:
 return
+
 		;__________________________MAIN WINDOW_________________________
 makeMainWindow(){
 	global
@@ -62,8 +69,8 @@ makeMainWindow(){
 	Gui 1:Add, DropDownList, hWndlistStream vStreamWith x88 y24 w68 +Sort Lowercase, potplayer|vlc||airplay|mplayer|smplayer|mpv|omx|webplay
 	Gui 1:Add, GroupBox, x8 y2 w153 h88, Stream
 	Gui 1:Add, CheckBox, vListPeerflix x16 y24 w68 h23, List files
-	Gui 1:Font, s20 Bold
-	;Gui 1:Add, Button, hWndButton4 vBtnSettings gBtnSettings x292 y2 w25 h25, ⚙
+	Gui 1:Font, s15
+	Gui 1:Add, Button, gBtnReloadTorrent x292 y2 w25 h25, ⏮️
 	Gui 1:Font
 	Gui 1:Add, GroupBox, x168 y2 w121 h88, Download
 	Gui 1:Add, Button, gbtnDownload x192 y56 w80 h23, Download
@@ -205,7 +212,7 @@ makeSettingsWindow(){
 	Gui 3:add, Text, x200 y107 w66 h23, Seconds
 	Gui 3:Add, GroupBox, x16 y40 w310 h140, Desktop
 	Gui 3:add, CheckBox, vIsStreamDisabledCheck x24 y128 w209 h23, Disable streaming button when peerflix is not installed
-	Gui 3:add, CheckBox, vIsTottrntHistoryDisabled x24 y152 w210 h23 +Disabled, Disable torrent history
+	Gui 3:add, CheckBox, vIsTorrentHistoryEnabled x24 y152 w210 h23, Enable torrent history
 
 
 
@@ -243,15 +250,37 @@ ExitApp
 
 ;TODO remove when features working
 betaFeatureDisable(){
-	GuiControl,Disable, Button7
+	Global
+	GuiControl,Disable, Button8
 	;verify that NPM and peerflix is installed
 	url=%A_Appdata%\npm\node_modules\peerflix
 	;msgbox %url%
 	if(!FileExist(url)){
-		IniRead,isStreamCheck,%IniLocation%,defaults,streamInstalledCheck
-		if(%isStreamCheck%)
+		IniRead,isStreamCheck,%IniLocation%,def ults,streamInstalledCheck
+		if(%isStreamCheck%){
 	 		GuiControl,Disable, Button1
-	 }
+		}
+	}
+	
+
+	IniRead, isHistoryEnabled,%IniLocation%, defaults, enableHistory
+	;msgbox %isHistoryEnabled%
+	
+	if 1 is Space
+			IniWrite,"", %IniLocation%, defaults, lastTorrent
+	if(isHistoryEnabled){
+		if 1 is not space
+		{
+			IniWrite, %1%, %IniLocation%, defaults, lastTorrent
+		}
+	}else{
+		GuiControl, Disable, Button4
+		;msgbox in else
+	}
+
+	
+	;IniRead, isHistoryEnabled, %IniLocation%, defaults, enableHistory
+
 	;GuiControl,Disable, Button7
 	;GuiControl,Disable, Button10
 }
@@ -415,6 +444,17 @@ BtnPopcorntime:
 ; TODO ... Popcorntime (opening arguments issue)
 	Return
 
+BtnReloadTorrent:
+IniRead, isHistoryEnabled, %IniLocation%, defaults, enableHistory
+msgbox %isHistoryEnabled%
+if(isHistoryEnabled){
+	IniRead, lastTorrent, %IniLocation%, defaults, lastTorrent,null
+	if(lastTorrent!="null"){
+		1=%lastTorrent%
+		animateTorrentLoaded(3)
+	}
+}
+return
 
 
 ;----------------------------Settings -------------------------------
@@ -484,8 +524,9 @@ BtnSettingsOk:
 	IniWrite,%isStreamDisabledCheck%,%IniLocation%,defaults,streamInstalledCheck
 	;Open to mouse Cursor
 	
+	IniWrite,%IsTorrentHistoryEnabled%,%IniLocation%,defaults,enableHistory
+	
 
-	;------------------[TAB 2]____Software Tab-------
 	
 	;TxtPopcorntime
 
@@ -567,6 +608,7 @@ IE_BeforeNavigate2(p*) {
 
 ;Setting 1 = Torrent loaded correctly
 ;Setting 2 = Torrent warning. Loaded, but does not appear to be a valid torrent
+;Setting 3 = Last torrent loaded from history
 animateTorrentLoaded(setting=0){
 	Global
 	;flicker the GUI, simple animation, not needed
@@ -580,6 +622,9 @@ animateTorrentLoaded(setting=0){
 	}else if(setting=2){
 		html.="<script>document.getElementById('mainText').innerHTML='Not a valid torrent';</script>"
 	 	html.="<style>body {border-color:#FF4500; border-width: 2px;}</style>"
+	}else if(setting=3){
+		html.="<script>document.getElementById('mainText').innerHTML='Reloaded last torrent';</script>"
+	 	html.="<style>body {border-color:#0080ff; border-width: 2px;}</style>"
 	}
 
 	wb.document.write(html)
@@ -826,7 +871,7 @@ populateSettingsFromFile(){
   	IniRead, DefaultMonitor, %IniLocation%, defaults, defaultMonitor
    	GuiControl,3:ChooseString,ComboBox3,%DefaultMonitor%
 
-   	IniRead, updateOnStartup,%IniLocation%,defaults,startupUpdateCheck
+   	IniRead, updateOnStartup,%IniLocation%,defaults,startupUpdateCheck,0
     GuiControl,3:,IsUpdateOnStartup,%updateOnStartup%
 
 
@@ -845,22 +890,23 @@ populateSettingsFromFile(){
 
 
 ;----------------TAB 3 -------------
-	IniRead, ReuseCmd, %IniLocation%, defaults, reuseCmd
+	IniRead, ReuseCmd, %IniLocation%, defaults, reuseCmd,0
     GuiControl,3:,ReuseCmd,%ReuseCmd%
 
      ;end peerflix stream on exit of player
-    iniRead, endStream, %IniLocation%,defaults, endStream
+    iniRead, endStream, %IniLocation%,defaults, endStream,0
     GuiControl,3:,BtnEndStream, %endStream%
 
     ;Timeout
-    iniRead,timeout,%IniLocation%,defaults,timeout
+    iniRead,timeout,%IniLocation%,defaults,timeout,45
     GuiControl,3:,TxtTimeout,%timeout%
 
 	;IniWrite,%isStreamDisabledCheck%,%IniLocation%,defaults,streamInstalledCheck
-    IniRead,isStreamCheck,%IniLocation%,defaults,streamInstalledCheck
+    IniRead,isStreamCheck,%IniLocation%,defaults,streamInstalledCheck,0
     GuiControl,3:,IsStreamDisabledCheck,%isStreamCheck%
     ;TODO Disable stream button when peerflix not #Install
-   	;TODO Disable torrent history
+	IniRead, isHistoryEnabled, %IniLocation%, defaults, enableHistory,0
+   	GuiControl,3:,IsTorrentHistoryEnabled,%isHistoryEnabled%
     return
 }
 
@@ -915,7 +961,8 @@ checkForNewVersions(silent=0){
 
 	;find the version
 	latestVersion:=inStr(info,"tag_name")
-	latestVersionNo:=SubStr(info,latestVersion+12,5) ;12 chars after the inStr starts version,
+	latestVersionNo:=SubStr(info,latestVersion+12,5) ;12 chars after the inStr starts version... must be a better way of doing this... xml - search by tags?
+
 
 	
 	;New update available
