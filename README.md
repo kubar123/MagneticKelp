@@ -30,7 +30,7 @@ Install directory:
 <col>
 </colgroup>
   <tr valign="top">
-    <td width="55%" rowspan="3" >
+    <td width="55%" rowspan="4" >
       <ol>
         <li> The menu. Open settings, or get help information here.</li>
 		<li> Enable to have the CMD window list all files in the torrent. Useful when streaming from a 'season' torrent. Use the arrow and enter keys to select the torrent you wish to stream. </li> 
@@ -40,30 +40,39 @@ Install directory:
 <li>Select which program to download the torrent with.</li>
 <li>Download with selected program in <b>Section 6</b>.</li>
 <li>Drag and drop a magnet link into the area. Torrent will be loaded, select the stream/download buttons.</li>
+<li>Reload last torrent, only enabled if the setting is enabled in settings</li>
 <li>Settings menu tabs.</li>
 <li> The default application that is shown in *Section 4* by default when the program opens.</li>
 <li> The default application that is shown in *Section 6* by default when the program opens.</li>
-<li> Attempts to use the old cmd process if it still exists to stream. Ends old stream and starts a new one in the same CMD window.</li>
-<li> The peerflix stream (CMD window) ends when the media player is closed. </li>
-<li> MagneticKelp will wait x seconds before attempting to hook into the media player. If the player has not started to stream when it times out, magneticKelp will exit, the stream will continue.</li>
-<li> Opens the application to where ever the mouse is located.</li>
+<li> Opens the application to wherever the mouse is located.</li>
 <li> Opens the application to the center of screen x. The amount of monitors is calculated based on your setup.</li>
+<li> Checks for updates when the prgoram starts </li>
 <li> Attempts to associate .torrent files with the application. May not always work, best to use the windows 'Open with' and browse to the *install directory* noted above.</li>
 <li> Associates magnet links with this application. Copies the application to the *install directory* noted above.</li>
 <li> Save the settings button. Some settings may require magneticKelp to restart to be applied.</li>
 <li> Cancel settings, discarding any changes. Opens the main window.</li>
 <li> Browse to the location of the programs .exe.</li>
 <li> Restores the software tab to defaults.</li>
+	      <li> Attempts to use the old cmd process if it still exists to stream. Ends old stream and starts a new one in the same CMD window.</li>
+<li> The peerflix stream (CMD window) ends when the media player is closed. </li>
+<li> MagneticKelp will wait x seconds before attempting to hook into the media player. If the player has not started to stream when it times out, magneticKelp will exit, the stream will continue.</li>
+	      <li>MagneticKelp will look for the peerflix install directory. If it does not exist, the stream button will be disabled.</li>
+<li> The history is saved when the application first runs. Currently only works when starting a torrent from a magnet link/.torrent file. Drag and drop not yet fully supported.</li>
 	</ol>
 </td>
-    <td><img align="right" src="https://raw.githubusercontent.com/kubar123/MagneticKelp/master/Img/mainWindowU.PNG" /></td>
+    <td><img align="right" src="https://raw.githubusercontent.com/kubar123/MagneticKelp/master/Img/helpInfo0.5.0A.PNG" /></td>
   </tr>
   <tr>
-    <td ><img align="right" src="https://raw.githubusercontent.com/kubar123/MagneticKelp/master/Img/settingsWindow1U.PNG" /></td>
+    <td ><img align="right" src="https://raw.githubusercontent.com/kubar123/MagneticKelp/master/Img/helpInfo0.5.0B.PNG" /></td>
   </tr>
   <tr>
-    <td ><img align='right' src="https://raw.githubusercontent.com/kubar123/MagneticKelp/master/Img/SettingsWindow2u.PNG" /></td>
+    <td ><img align="right" src="https://raw.githubusercontent.com/kubar123/MagneticKelp/master/Img/helpInfo0.5.0C.PNG" /></td>
   </tr>
+  <tr>
+    <td><img align="right" src="https://raw.githubusercontent.com/kubar123/MagneticKelp/master/Img/helpInfo0.5.0D.PNG" />
+    </td>
+  </tr>
+
 </table>
 
 
