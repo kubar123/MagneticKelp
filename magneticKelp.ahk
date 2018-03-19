@@ -699,7 +699,7 @@ firstTimeCheck(){
     ;check if program is up to date, if not we want a copy of the program in the install location. (update)
     IniRead, lastVerRan, %IniLocation%, Defaults, LastVersionRan
     if(lastVerRan < PROGRAM_VERSION){
-    	MsgBox,64,Updated,You are running a new version of the application.`nMagneticKelp has been updated.
+    	MsgBox,4160,Updated,You are running a new version of the application.`nMagneticKelp has been updated.
 		IniWrite,%PROGRAM_VERSION%,%IniLocation%,Defaults,LastVersionRan
 		FileCopy, %A_ScriptFullPath%,%A_AppData%\MagneticKelp\magneticKelp.exe,1
 
