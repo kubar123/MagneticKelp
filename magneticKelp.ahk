@@ -372,15 +372,7 @@ return
 GuiDropFiles:
 	1=%A_GuiEvent%
 	animateTorrentLoaded(1)
-	IniRead, isHistoryEnabled,%IniLocation%, defaults, enableHistory
-	
-	
-	if(isHistoryEnabled){
-		if 1 is not space
-		{
-			IniWrite, %1%, %IniLocation%, defaults, lastTorrent
-		}
-	}
+	isHistoryEnabled()
 	return
 
 
@@ -593,7 +585,17 @@ BtnResetDefault:
 ;==================================================================================================================================
 ;-----------------------------------------------Functions ----- -------------------------------------------------------------------
 ;==================================================================================================================================
-
+isHistoryEnabled(){
+	Global
+	IniRead, isHistoryEnabled,%IniLocation%, defaults, enableHistory
+	
+	if(isHistoryEnabled){
+		if 1 is not space
+		{
+			IniWrite, %1%, %IniLocation%, defaults, lastTorrent
+		}
+	}
+}
 ;------ActiveX / Drag and drop magnet links -----------
 IE_BeforeNavigate2(p*) {
 	Global 
@@ -606,14 +608,8 @@ IE_BeforeNavigate2(p*) {
 	isMagnetLink:=RegExMatch(p.2, "magnet:\?xt=urn:[a-z0-9]")
 	if(isMagnetLink){
 		animateTorrentLoaded(1)
-		IniRead, isHistoryEnabled,%IniLocation%, defaults, enableHistory
-	
-		if(isHistoryEnabled){
-			if 1 is not space
-			{
-				IniWrite, %1%, %IniLocation%, defaults, lastTorrent
-			}
-	}
+		isHistoryEnabled()
+
 	return
 	}	Else{
 		animateTorrentLoaded(2)
