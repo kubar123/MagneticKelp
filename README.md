@@ -82,3 +82,10 @@ A. Click the 'defaults' button and restart the app. If the issue persists delete
 
 *Q. I cannot click on the stream button, it is disabled.*  
 A. Peerflix was not found, see instructions above to install the streaming component.
+
+
+*Q. Application doesnt start correctly or at all.
+A. Try deleting the install directory noted above, and downloading the latest release from above.
+
+*Q. The timeout/exit stream on end of player options dont work
+A. The main window must be open and streaming the content when the timeout reaches 0. Do not end the media player before the timeout has ended, it only hooks into the player once.
