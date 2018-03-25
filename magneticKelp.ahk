@@ -20,10 +20,15 @@ LOCATION_UTORRENT=%A_AppData%\uTorrent\uTorrent.exe
 LOCATION_DELUGE=C:\Program Files (x86)\Deluge\deluge.exe
 LOCATION_BITTORRENT=%A_Appdata%\BitTorrent\BitTorrent.exe
 
+;________________________Subtitles
+MediaStreamName:="Modern.Family.S09E16.720p.HDTV.x264-AVS.mkv"
+Title:="",Season:="",Episode:="",IMDBID:="",OSUserAgent:="",Subtitles:="",DocText:=""
+
+
 ;==============================================	/END GLOBAL ==============================
 
 ;---------------------------------- 	MAIN 	-------------------
-
+testSubs()
 makeMainWindow()
 ;checkForNewVersions()
 populateFromFile()
@@ -1038,3 +1043,98 @@ runBatch(){
 }
 
 ;===================================== END UPDATE ================================================
+
+testSubs(){
+;	makeHTTPRequest("GuessMovieFromString")
+;	;parseXMLAndSave()
+;	ExitApp
+}
+
+;========================================= SUBTITLES =============================================
+;Global Variables For subs
+;TEST VARIABLES Delete
+;---------------------------------------------------
+
+
+;return
+
+
+
+;parse XML
+; doc:=ComObjCreate("MSXML2.DOMDocument.6.0")
+; doc.async:=False 
+; doc.loadXml(result)
+;parseXml(result)
+
+subLogin(){
+	OSUserAgent:="MagneticKelp v0.6"
+	WinHTTP := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+	WinHTTP.Open("POST", "https://api.opensubtitles.org/xml-rpc", 0)
+	WinHTTP.SetRequestHeader("Content-Type", "text/xml")
+
+	WinHTTP.Send(Body)
+	Result := WinHTTP.ResponseText
+}
+
+makeHTTPRequest(setting=""){
+	global
+	WinHTTP := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+	WinHTTP.Open("POST", "https://api.opensubtitles.org/xml-rpc", 0)
+	WinHTTP.SetRequestHeader("Content-Type", "text/xml")
+	Body=""
+	if(setting="LogIn"){
+		Body=
+		(
+			<?xml version='1.0'?><methodCall><methodName>LogIn</methodName><params><param><value>
+			<string></string></value></param><param><value><string></string></value></param><param><value>
+			<string></string></value></param><param><value><string>%OSUserAgent%</string></value></param>
+			</params></methodCall>
+		)
+	}
+	else if(setting="GuessMovieFromString"){
+		Body = 
+		(
+			<?xml version='1.0'?><methodCall><methodName>GuessMovieFromString</methodName><params><param>
+			<value><string>JkPv-4xpA11I44hHg0MSUvk4hX4</string></value></param><param><value><array><data>
+			<value><string>%MediaStreamName%</string></value></data></array></value></param></params></methodCall>
+		)
+	}
+
+	WinHTTP.Send(Body)
+	Result := WinHTTP.ResponseText
+	parseXMLAndSave(result,setting)
+
+}
+
+;Setting = XML-RPC method name
+parseXMLAndSave(xmlResponse="",setting=""){
+global
+
+;WinHTTP := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+;WinHTTP.Open("POST", "https://api.opensubtitles.org/xml-rpc", 0)
+;WinHTTP.SetRequestHeader("Content-Type", "application/json")
+
+
+;MediaStreamName="Modern.Family.S09E16.720p.HDTV.x264-AVS.mkv"
+
+;Body:= "<?xml version=""1.0""?><methodCall><methodName>SearchSubtitles</methodName><params>  <param>   <value><string>kR2NzEvQniAAUIUehnzfZ6WJq8c</string></value>  </param>  <param>   <value>    <array>     <data>      <value>       <struct>        <member>         <name>sublanguageid</name>         <value><string>eng</string>         </value>        </member>        <member>         <name>imdbid</name>         <value><int>6868216</int></value>       </member>       </struct>      </value>     </data>    </array>   </value>  </param></params></methodCall>"
+;
+;	WinHTTP.Send(Body)
+;	xmlResponse := WinHTTP.ResponseText
+;	msgbox %  "`n`nresult: " xmlResponse
+;
+
+
+	doc:=ComObjCreate("MSXML2.DOMDocument.6.0")
+	doc.async:=False 
+	doc.loadXml(xmlResponse)
+
+	Title:=doc.selectSingleNode("//name[.=""MovieName""]/following-sibling`:`:value/string")
+	Season:=doc.selectSingleNode("//name[.=""season""]/following-sibling`:`:value/int")
+	Episode:=doc.selectSingleNode("//name[.=""episode""]/following-sibling`:`:value/int")
+	IMDBID:= doc.selectSingleNode("//name[.=""IDMovieIMDB""]/following-sibling`:`:value/int")
+	Subtitles:= doc.selectSingleNode("//name[.=""data""]/following-sibling`:`:value/string")
+	MovType:=doc.selectSingleNode("(//name[.=""MovieKind""]/following-sibling`:`:value/string)[1]")
+	DocText:= MediaStreamName . "  `n" . Title.Text . " | s: " . Season.text . " e: " . Episode.text . "IMDB ID: " . IMDBID.text . " Type: " . MovType.text
+	Msgbox %DocText% 
+}
