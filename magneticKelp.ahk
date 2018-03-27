@@ -617,7 +617,7 @@ IE_BeforeNavigate2(p*) {
 		animateTorrentLoaded(1)
 		isHistoryEnabled()
 
-	return
+	;return
 	}	Else{
 		animateTorrentLoaded(2)
 	}
@@ -825,6 +825,8 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 	}
 	Sleep, 5000
 	Send !{space}es{enter}
+
+
 }
 
 
