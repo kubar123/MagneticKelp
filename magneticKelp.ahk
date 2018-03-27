@@ -800,6 +800,24 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 		Send peerflix "%MagnetLink%" %Opts% {enter}
 	;____________________________________________
 
+;------------------- Get data from CMD window ------------------------
+
+
+	Loop 6{
+		Sleep, 2000
+		SetKeyDelay, 0, 0
+		;ControlSend,,{Alt down}{space}es{enter},ahk_pid %lastPid%
+		Send, !{space}es{enter}
+		cmdRawInfo:=clipboard
+
+		foundPos:=InStr(cmdRawInfo,"info streaming",false,-1)
+		if(foundPos>0){
+			msgbox % foundPos
+			break
+		}
+
+		;msgbox % ahk_pid lastPid
+	}
 	; ------------------------------------------------------------------------------------------------------------
 ;---------------------- End stream when player is closed ---------------------------------------------------------
 	if(endStream){
@@ -829,8 +847,6 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 		WinWaitClose, ahk_pid %playerPID%
 		WinClose,ahk_pid %lastPid%,,,,
 	}
-	Sleep, 5000
-	Send !{space}es{enter}
 
 
 }
