@@ -823,6 +823,8 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 		WinWaitClose, ahk_pid %playerPID%
 		WinClose,ahk_pid %lastPid%,,,,
 	}
+	Sleep, 5000
+	Send !{space}es{enter}
 }
 
 
@@ -994,7 +996,7 @@ checkForNewVersions(silent=0){
 		latestVersionText:=SubStr(info,latestVersionDescNo+7)
 		;remove ending JSON tags
 		latestVersionText:=SubStr(latestVersionText,1,strLen(latestVersionText)-2)
-		latestVersionText=Current version: v%PROGRAM_VERSION% Latest version: v%latestVersionNo%`nUpdate now? `n`nChange log:`n%latestVersionText%
+		latestVersionText= Current version: v%PROGRAM_VERSION% Latest version: v%latestVersionNo%`nUpdate now? `n`nChange log:`n%latestVersionText%
 		;Format the text to remove MD tags (eg. ##, /n, /r)
 		latestVersionText:=StrReplace(latestVersionText,"\n"," `n")
 		latestVersionText:=StrReplace(latestVersionText,"##"," ---")
@@ -1019,9 +1021,9 @@ checkForNewVersions(silent=0){
 newVersionUpdater(versionToDownload=0){
 	Global
 	Gui, 1:hide
-	splashTextInfo:="The application might restart once after this message closes
-	splashTextInfo.=", a command window should flash for a second. `nOnce it closes the update has been completed."
-	SplashTextOn,300,120,Update in progres...,%splashTextInfo% 
+	SplashTextInfo:="The application might restart once after this message closes," 
+	SplashTextInfo.="a command window should flash for a second. `nOnce it closes the update has been completed."
+	SplashTextOn,300,120,Update in progres..., %SplashTextInfo%
 	UrlLocation=https://github.com/kubar123/MagneticKelp/releases/download/v%versionToDownload%/magneticKelp.exe
 	;MsgBox %UrlLocation%
 	UrlDownloadToFile, %UrlLocation%, %ExeLocation%NEW
@@ -1049,12 +1051,12 @@ runBatch(){
 ;===================================== END UPDATE ================================================
 
 testSubs(){
-	;makeHTTPRequest("logIn")
-	;makeHTTPRequest("GuessMovieFromString")
-	;makeHTTPRequest("SearchSubtitlesByIMDB")
-	;makeHTTPRequest("DownloadSubtitles")
-;	;;;parseXMLAndSave()
-	;ExitApp
+;	makeHTTPRequest("logIn")
+;	makeHTTPRequest("GuessMovieFromString")
+;	makeHTTPRequest("SearchSubtitlesByIMDB")
+;	makeHTTPRequest("DownloadSubtitles")
+;;	;;parseXMLAndSave()
+;	ExitApp
 }
 
 ;========================================= Subtitles =============================================
@@ -1180,6 +1182,7 @@ global
 		WinHTTP2.Send(Body)
 		Result:=WinHTTP2.responseText
 		msgbox %result%
+		FileAppend, %result%, info.srt
 	}
 
 ;
@@ -1197,3 +1200,5 @@ global
 	DocText:= MediaStreamName . "  `n" . OSTitle . " | s: " . OSSeason . " e: " . OSEpisode . "IMDB ID: " . OSIMDBID . " Type: " . OSMovType
 	;Msgbox %DocText% 
 }
+
+
