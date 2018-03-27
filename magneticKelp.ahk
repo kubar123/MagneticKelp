@@ -767,13 +767,18 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 		}
 	}
 
+	;streamWindow=0
 	IfWinNotExist, % "ahk_pid " lastPid
 	{
 		;Saving PID to file - Reuse old CMD if still open
-		run cmd.exe,,,streamWindow
-		IniWrite,%streamWindow%,%IniLocation%,Peerflix,lastPID
-		WinWait, ahk_pid %streamWindow%
+		run cmd.exe,,,lastPid
+		IniWrite,%lastPid%,%IniLocation%,Peerflix,lastPID
+		WinWait, ahk_pid %lastPid%
+		
+		SetKeyDelay, 0, 0
 		Send cd .. {enter}
+		SetKeyDelay, 0, 0
+		Send cls {enter}
 		
 	}
 
@@ -786,6 +791,7 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 	; Save PID of new player to be closed at next run
 	;------------------
 
+	SetKeyDelay, 0, 0
 
 	; ___ LIST FILES CHECK ______________________
 	if List = 1
