@@ -20,9 +20,9 @@ LOCATION_UTORRENT=%A_AppData%\uTorrent\uTorrent.exe
 LOCATION_DELUGE=C:\Program Files (x86)\Deluge\deluge.exe
 LOCATION_BITTORRENT=%A_Appdata%\BitTorrent\BitTorrent.exe
 
-;________________________Subtitles
-MediaStreamName:="Modern.Family.S09E16.720p.HDTV.x264-AVS.mkv"
-Title:="",Season:="",Episode:="",IMDBID:="",OSUserAgent:="",Subtitles:="",DocText:="",OSToken=""
+;________________________SubTitles
+MediaStreamName:="WwW.SeeHD.PL_Black Panther 2018 NEW PROPER HD-TS X264-CPG.mkv"
+OSTitle:="",OSSeason:="",OSEpisode:="",OSIMDBID:="",OSUserAgent:="",OSSubtitleID="",OSToken="",OSTags=""
 
 
 ;==============================================	/END GLOBAL ==============================
@@ -123,8 +123,10 @@ makeMainWindow(){
 
 	;-----HTML-------
 	html:="<html onContextMenu='return false;' ><head onContextMenu='return false;'>"
-	html.="<style>body{ margin: 0; padding: 0; background-color:#f1f1f1; height:100%; overflow:hidden; filter:alpha(opacity=60); border-style:dashed; border-width:1px; }, "
-	html.="div { padding-top:4px; height:100%; overflow:hidden; font-family: 'Kalam'; -ms-user-select: none; cursor:default; text-align: center;  }</style>"
+	html.="<style>body{ margin: 0; padding: 0; background-color:#f1f1f1; height:100%;"
+	html.="overflow:hidden; filter:alpha(opacity=60); border-style:dashed; border-width:1px; }, "
+	html.="div { padding-top:4px; height:100%; overflow:hidden; font-family: 'Kalam'; -ms-user-select: none;"
+	html.="cursor:default; text-align: center;  }</style>"
 	html.="</head><body><div id='mainText' unselectable='on' onContextMenu='return false;'>"
 	;html.="<div onContentMenu='return false;'><img onContentMenu='return false;' width='300' height='60' src='D:\OneDrive\git\MagneticKelp\download.png'/>"
 	;check to see if magnet link is already loaded
@@ -780,7 +782,7 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 	
 	; ---- TODO -------
 	; close potplayer/vlc if already open with localhost...
-	;Window title: 		http://localhost:8888/ - PotPlayer
+	;Window OSTitle: 		http://localhost:8888/ - PotPlayer
 	; Save PID of new player to be closed at next run
 	;------------------
 
@@ -826,7 +828,7 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 
 
 ;centers the window to the middle of the 'default monitor'
-centerWindow(WinTitle=""){
+centerWindow(WinOSTitle=""){
 	Global
 	;select default screen
     IniRead, DefaultMonitor, %IniLocation%, defaults, defaultMonitor
@@ -843,7 +845,7 @@ centerWindow(WinTitle=""){
     movLeft:=((area1Left+area1Right)/2)-(width/2)
     
    ; MsgBox %movTop% - %movLeft%
-    WinMove,%WinTitle%,, %movLeft%,%movTop%
+    WinMove,%WinOSTitle%,, %movLeft%,%movTop%
 }
 
 
@@ -1017,7 +1019,9 @@ checkForNewVersions(silent=0){
 newVersionUpdater(versionToDownload=0){
 	Global
 	Gui, 1:hide
-	SplashTextOn,300,120,Update in progres..., The application might restart once after this message closes, a command window should flash for a second. `nOnce it closes the update has been completed.
+	splashTextInfo:="The application might restart once after this message closes
+	splashTextInfo.=", a command window should flash for a second. `nOnce it closes the update has been completed."
+	SplashTextOn,300,120,Update in progres...,%splashTextInfo% 
 	UrlLocation=https://github.com/kubar123/MagneticKelp/releases/download/v%versionToDownload%/magneticKelp.exe
 	;MsgBox %UrlLocation%
 	UrlDownloadToFile, %UrlLocation%, %ExeLocation%NEW
@@ -1047,13 +1051,15 @@ runBatch(){
 testSubs(){
 	;makeHTTPRequest("logIn")
 	;makeHTTPRequest("GuessMovieFromString")
-;	;;parseXMLAndSave()
+	;makeHTTPRequest("SearchSubtitlesByIMDB")
+	;makeHTTPRequest("DownloadSubtitles")
+;	;;;parseXMLAndSave()
 	;ExitApp
 }
 
-;========================================= SUBTITLES =============================================
-
-
+;========================================= Subtitles =============================================
+;=				OpenSubtitles.org		 =
+;=================================================================================================
 ;parse XML
 ; doc:=ComObjCreate("MSXML2.DOMDocument.6.0")
 ; doc.async:=False 
@@ -1063,7 +1069,7 @@ testSubs(){
 subLogin(){
 	
 	WinHTTP := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-	WinHTTP.Open("POST", "https://api.opensubtitles.org/xml-rpc", 0)
+	WinHTTP.Open("POST", "https://api.openSubtitles.org/xml-rpc", 0)
 	WinHTTP.SetRequestHeader("Content-Type", "text/xml")
 
 	WinHTTP.Send(Body)
@@ -1072,12 +1078,12 @@ subLogin(){
 
 ;Setting = Method name
 ;Setting = uncompressGz
-;			  ^- Sent to server to uncompress subtitles 
+;			  ^- Sent to server to uncompress Subtitles 
 makeHTTPRequest(setting=""){
 	global
 	OSUserAgent:="MagneticKelp v0.6"
 	WinHTTP := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-	WinHTTP.Open("POST", "https://api.opensubtitles.org/xml-rpc", 0)
+	WinHTTP.Open("POST", "https://api.openSubtitles.org/xml-rpc", 0)
 	WinHTTP.SetRequestHeader("Content-Type", "text/xml")
 	Body=""
 
@@ -1099,17 +1105,18 @@ makeHTTPRequest(setting=""){
 	}else if(setting="SearchSubtitlesByIMDB" ){
 		Body =
 		(
-			<?xml version='1.0'?><methodCall><methodName>SearchSubtitles</methodName><params><param><value><string>
-			%OSToken%</string></value></param><param><value><array><data><value><struct><member>
-			<name>sublanguageid</name><value><string>eng</string></value></member><member><name>imdbid</name><value>
-			<int>%IMDBID%</int></value></member><member><name>tag</name><value><string>%tags%</string></value></struct></value></data></array></value></param></params></methodCall>
+			<?xml version="1.0"?><methodCall><methodName>SearchSubtitles</methodName><params><param><value>
+			<string>%OSToken%</string></value></param><param><value><array><data><value><struct>
+        	<member><name>sublanguageid</name><value><string>eng</string></value></member><member><name>imdbid</name>
+         	<value><int>%OSIMDBID%</int></value></member><member><name>tag</name><value><string>'%OSTags%'</string></value>
+      		</member></struct></value></data></array></value></param></params></methodCall>
 		)
 	}else if (setting="DownloadSubtitles"){
 		Body =
 		(
 			<?xml version='1.0'?><methodCall><methodName>DownloadSubtitles</methodName><params><param><value>
 			<string>%OSToken%</string></value></param><array><data><param><value>
-			<int>%IMDBID%</int></value></param></data></array></params></methodCall>
+			<int>%OSSubtitleID%</int></value></param></data></array></params></methodCall>
 		)
 	}
 
@@ -1121,33 +1128,58 @@ makeHTTPRequest(setting=""){
 ;Setting = XML-RPC method name
 parseXMLAndSave(xmlResponse="",setting=""){
 global
+;msgbox hi
+	;_________ XPATH to select specific element
 	doc:=ComObjCreate("MSXML2.DOMDocument.6.0")
 	doc.async:=False 
 	doc.loadXml(xmlResponse)
 
+	;_________ See if token used was valid. If invalid relogin and redo HTTP attempt.
 	OSStatus:=doc.selectSingleNode("//name[.=""status""]/following-sibling`:`:value/string").text
-	if(OSStatus="414 Unknown User Agent"){
-		msgbox 414
+	if(OSStatus="414 Unknown User Agent" || OSStatus="401 Unauthorized"){
+		msgbox OSSTATUS: %OSStatus%
+		msgbox % doc.text
 		makeHTTPRequest("LogIn")
 		makeHTTPRequest(setting)
-	}else{
-		msgbox 200 ok
+		return
 	}
-	MsgBox %OSStatus%
+	;MsgBox %OSStatus%
 
 
 	if(setting="LogIn"){
 		OSToken:=doc.selectSingleNode("//name[.=""token""]/following-sibling`:`:value/string").text
 	}else if(setting="GuessMovieFromString"){
-		Title:=doc.selectSingleNode("//name[.=""MovieName""]/following-sibling`:`:value/string").text
-		Season:=doc.selectSingleNode("//name[.=""season""]/following-sibling`:`:value/int").text
-		Episode:=doc.selectSingleNode("//name[.=""episode""]/following-sibling`:`:value/int").text
-		IMDBID:= doc.selectSingleNode("//name[.=""IDMovieIMDB""]/following-sibling`:`:value/int").text
-		MovType:=doc.selectSingleNode("(//name[.=""MovieKind""]/following-sibling`:`:value/string)[1]").text
-	}else if(setting="SearchSubtitles"){
-		
+		;________ TAGS
+		OSreleaseGroup:=doc.selectSingleNode("//name[.=""release_group""]/following-sibling`:`:value/string").text
+		OSFormat:=doc.selectSingleNode("//name[.=""format""]/following-sibling`:`:value/string").text
+		OSOther:=doc.selectSingleNode("//name[.=""other""]/following-sibling`:`:value/string").text
+		OSTags=%OSReleaseGroup%, %OSFormat%,%OSOther%
+
+
+		OSIMDBID:= doc.selectSingleNode("(//name[.=""IDMovieIMDB""]/following-sibling`:`:value/string)[1]").text
+		OSTitle:=doc.selectSingleNode("//name[.=""MovieName""]/following-sibling`:`:value/string").text
+		OSMovType:=doc.selectSingleNode("(//name[.=""MovieKind""]/following-sibling`:`:value/string)[1]").text
+		OSSeason:=doc.selectSingleNode("//name[.=""Season""]/following-sibling`:`:value/int").text
+		OSEpisode:=doc.selectSingleNode("//name[.=""Episode""]/following-sibling`:`:value/int").text
+		;msgbox % OSIMDBID
+	}else if(setting="SearchSubtitlesByIMDB"){
+		;msgbox % doc.text "___ searchSub"
+		OSSubtitleID:=doc.selectSingleNode("(//name[.=""IDSubtitleFile""]/following-sibling`:`:value/string)[1]").text
+		;msgbox @@@@: %OSSubtitleID% _ %OSIMDBID%
+
 	}else if (setting="DownloadSubtitles"){
-		
+		OSSubtitles:=doc.selectSingleNode("//name[.=""data""]/following-sibling`:`:value/string").text
+		;msgbox % doc.text
+		;msgbox % doc.text
+		;msgbox SUBTITLES:________ %OSSubtitles% 
+		WinHTTP2 := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+		WinHTTP2.Open("POST", "http://api.lansoftprogramming.com/uncompress/gzip", 0)
+		WinHTTP2.SetRequestHeader("Content-Type", "application/json")
+		Body = {"data":"%OSSubtitles%"}
+		;msgbox % body
+		WinHTTP2.Send(Body)
+		Result:=WinHTTP2.responseText
+		msgbox %result%
 	}
 
 ;
@@ -1160,8 +1192,8 @@ global
 	
 ;					XPATH to find the correct element
 	
-	Subtitles:= doc.selectSingleNode("//name[.=""data""]/following-sibling`:`:value/string")
+	;OSSubtitles:= doc.selectSingleNode("//name[.=""data""]/following-sibling`:`:value/string")
 	
-	DocText:= MediaStreamName . "  `n" . Title . " | s: " . Season . " e: " . Episode . "IMDB ID: " . IMDBID . " Type: " . MovType.text
-	Msgbox %DocText% 
+	DocText:= MediaStreamName . "  `n" . OSTitle . " | s: " . OSSeason . " e: " . OSEpisode . "IMDB ID: " . OSIMDBID . " Type: " . OSMovType
+	;Msgbox %DocText% 
 }
