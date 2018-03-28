@@ -835,6 +835,7 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 
 		;msgbox % ahk_pid lastPid
 	}
+	;msgbox timed out!
 	; ------------------------------------------------------------------------------------------------------------
 ;---------------------- End stream when player is closed ---------------------------------------------------------
 	if(endStream){
@@ -1092,12 +1093,12 @@ runBatch(){
 ;===================================== END UPDATE ================================================
 
 testSubs(){
-;	makeHTTPRequest("logIn")
-;	makeHTTPRequest("GuessMovieFromString")
-;	makeHTTPRequest("SearchSubtitlesByIMDB")
-;	makeHTTPRequest("DownloadSubtitles")
+	makeHTTPRequest("logIn")
+	makeHTTPRequest("GuessMovieFromString")
+	makeHTTPRequest("SearchSubtitlesByIMDB")
+	makeHTTPRequest("DownloadSubtitles")
 ;;	;;parseXMLAndSave()
-;	ExitApp
+	ExitApp
 }
 
 ;========================================= Subtitles =============================================
@@ -1222,8 +1223,13 @@ global
 		;msgbox % body
 		WinHTTP2.Send(Body)
 		Result:=WinHTTP2.responseText
-		msgbox %result%
-		FileAppend, %result%, info.srt
+		;msgbox %result%
+
+		NoExtensionStr:=SubStr(MediaStreamName,1,-4)
+		newSrtFile=%noExtensionStr%.srt
+		msgbox %newSrtFile%
+		msgbox %OSFilePath%
+		FileAppend, %result%, %OSFilePath%/%NoExtensionStr%/%newSrtFile%
 	}
 
 ;
