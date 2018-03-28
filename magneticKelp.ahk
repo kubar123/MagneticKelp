@@ -22,13 +22,13 @@ LOCATION_BITTORRENT=%A_Appdata%\BitTorrent\BitTorrent.exe
 
 ;________________________SubTitles
 MediaStreamName:="WwW.SeeHD.PL_Black Panther 2018 NEW PROPER HD-TS X264-CPG.mkv"
-OSTitle:="",OSSeason:="",OSEpisode:="",OSIMDBID:="",OSUserAgent:="",OSSubtitleID="",OSToken="",OSTags=""
+OSTitle:="",OSSeason:="",OSEpisode:="",OSIMDBID:="",OSUserAgent:="",OSSubtitleID="",OSToken="",OSTags="",OSFilePath=""
 
 
 ;==============================================	/END GLOBAL ==============================
 
 ;---------------------------------- 	MAIN 	-------------------
-testSubs()
+;testSubs()
 makeMainWindow()
 ;checkForNewVersions()
 populateFromFile()
@@ -817,7 +817,19 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 
 		foundPos:=InStr(cmdRawInfo,"info streaming",false,-1)
 		if(foundPos>0){
-			msgbox % foundPos
+			ParsedFileName:=substr(cmdRawInfo,foundPos+15,300)
+			RegExMatch(ParsedFileName, "(^[^\s]+)",OSFileName,1)
+			;msgbox % cmdRawInfo
+
+
+			foundPos2:=inStr(cmdRawInfo,"info path",false,-1)
+			ParsedFilePath:=subStr(cmdRawInfo,foundPos2+10,100)
+			RegExMatch(ParsedFilePath, "(^[^\s]+)",FilePath,1)
+
+			msgbox % filePath
+			OSFilePath=%FilePath%
+			MediaStreamName=%OSFileName%
+			;msgbox % OSFileName
 			break
 		}
 
