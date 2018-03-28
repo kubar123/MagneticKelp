@@ -761,9 +761,16 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 			;msgBox, Exist
 			
 			WinActivate, % "ahk_pid " lastPid
-			Send ^c ^c ;{enter}		;end current stream
+			SetKeyDelay, 5, 0
 			WinWait, ahk_pid %lastPid%
-			Send ^c
+			Send ^c ^c ^c {enter}		;end current stream
+			Send ^c {enter}		;end current stream
+			
+			SetKeyDelay, 0, 0
+
+			;Send ^c
+			Send cls {enter}
+
 		}
 	}
 
@@ -773,13 +780,10 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 		;Saving PID to file - Reuse old CMD if still open
 		run cmd.exe,,,lastPid
 		IniWrite,%lastPid%,%IniLocation%,Peerflix,lastPID
-		WinWait, ahk_pid %lastPid%
+		WinActivate, ahk_pid %lastPid%
 		
 		SetKeyDelay, 0, 0
-		Send cd .. {enter}
-		SetKeyDelay, 0, 0
-		Send cls {enter}
-		
+		Send cd .. {enter}	
 	}
 
 
@@ -807,6 +811,7 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 		Sleep, 2000
 		SetKeyDelay, 0, 0
 		;ControlSend,,{Alt down}{space}es{enter},ahk_pid %lastPid%
+		WinActivate, % "ahk_pid " lastPid
 		Send, !{space}es{enter}
 		cmdRawInfo:=clipboard
 
