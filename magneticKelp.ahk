@@ -799,9 +799,9 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 
 	; ___ LIST FILES CHECK ______________________
 	if List = 1
-		Send peerflix -l "%MagnetLink%" %Opts% {enter}
+		Send peerflix -l "%MagnetLink%" {enter}
 	if List = 0
-		Send peerflix "%MagnetLink%" %Opts% {enter}
+		Send peerflix "%MagnetLink%" {enter}
 	;____________________________________________
 
 ;------------------- Get data from CMD window ------------------------
@@ -826,7 +826,7 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 			ParsedFilePath:=subStr(cmdRawInfo,foundPos2+10,100)
 			RegExMatch(ParsedFilePath, "(^[^\s]+)",FilePath,1)
 
-			msgbox % filePath
+			;msgbox % filePath
 			OSFilePath=%FilePath%
 			MediaStreamName=%OSFileName%
 			;msgbox % OSFileName
@@ -866,7 +866,7 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 		WinClose,ahk_pid %lastPid%,,,,
 	}
 
-
+	testSubs()
 }
 
 
@@ -1227,9 +1227,19 @@ global
 
 		NoExtensionStr:=SubStr(MediaStreamName,1,-4)
 		newSrtFile=%noExtensionStr%.srt
-		msgbox %newSrtFile%
-		msgbox %OSFilePath%
-		FileAppend, %result%, %OSFilePath%/%NoExtensionStr%/%newSrtFile%
+		;msgbox %newSrtFile%
+		FileAppend, %result%, %OSFilePath%/%newSrtFile%
+
+;===== ISSUE CRITICAL BUG =====
+; 				FILE NOT ALWAYS IN %OSfILEpATH%\%NoExtensionStr% --
+;					Sometimes files in root of \osfilePath, other times may be in differently named folders.
+;		Fix?: use root of that directlry, and add to potplayer/vlc manually using hotkeys?
+;			Issue with fix: sometimes browsing of file is required
+;		Fix2:	run the app with subtitle parameters (cmd)
+		if(opts="--potplayer")
+			Run, C:\Program Files\DAUM\PotPlayer\PotPlayerMini64.exe "%OSFilePath%\%NoExtensionStr%\%MediaStreamName%"
+		else if (opts = "--vlc")
+			Run, C:\Program Files\VideoLAN\VLC\vlc.exe "%OSFilePath%\%NoExtensionStr%\%MediaStreamName%"
 	}
 
 ;
