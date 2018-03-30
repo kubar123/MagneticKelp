@@ -23,7 +23,7 @@ LOCATION_BITTORRENT=%A_Appdata%\BitTorrent\BitTorrent.exe
 ;________________________SubTitles
 MediaStreamName:="WwW.SeeHD.PL_Black Panther 2018 NEW PROPER HD-TS X264-CPG.mkv"
 OSTitle:="",OSSeason:="",OSEpisode:="",OSIMDBID:="",OSUserAgent:="",OSSubtitleID="",OSToken="",OSTags="",OSFilePath=""
-
+Opts=""
 
 ;==============================================	/END GLOBAL ==============================
 
@@ -806,15 +806,16 @@ makePeerflix(MagnetLink="", Opts="", List=0){
 
 ;------------------- Get data from CMD window ------------------------
 
-
+	Sleep, 2000
 	Loop 6{
-		Sleep, 2000
+		Sleep, 1000
+		clipSave:=ClipboardAll
 		SetKeyDelay, 0, 0
 		;ControlSend,,{Alt down}{space}es{enter},ahk_pid %lastPid%
 		WinActivate, % "ahk_pid " lastPid
 		Send, !{space}es{enter}
 		cmdRawInfo:=clipboard
-
+		clipboardL=clipSave
 		foundPos:=InStr(cmdRawInfo,"info streaming",false,-1)
 		if(foundPos>0){
 			ParsedFileName:=substr(cmdRawInfo,foundPos+15,300)
@@ -1228,6 +1229,7 @@ global
 		NoExtensionStr:=SubStr(MediaStreamName,1,-4)
 		newSrtFile=%noExtensionStr%.srt
 		;msgbox %newSrtFile%
+		;msgbox %OSFilePath%
 		FileAppend, %result%, %OSFilePath%/%newSrtFile%
 
 ;===== ISSUE CRITICAL BUG =====
@@ -1240,6 +1242,7 @@ global
 			Run, C:\Program Files\DAUM\PotPlayer\PotPlayerMini64.exe "%OSFilePath%\%NoExtensionStr%\%MediaStreamName%"
 		else if (opts = "--vlc")
 			Run, C:\Program Files\VideoLAN\VLC\vlc.exe "%OSFilePath%\%NoExtensionStr%\%MediaStreamName%"
+
 	}
 
 ;
@@ -1257,5 +1260,4 @@ global
 	DocText:= MediaStreamName . "  `n" . OSTitle . " | s: " . OSSeason . " e: " . OSEpisode . "IMDB ID: " . OSIMDBID . " Type: " . OSMovType
 	;Msgbox %DocText% 
 }
-
 
