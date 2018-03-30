@@ -1239,9 +1239,9 @@ global
 ;			Issue with fix: sometimes browsing of file is required
 ;		Fix2:	run the app with subtitle parameters (cmd)
 		if(opts="--potplayer")
-			Run, C:\Program Files\DAUM\PotPlayer\PotPlayerMini64.exe "%OSFilePath%\%NoExtensionStr%\%MediaStreamName%"
+			Run, C:\Program Files\DAUM\PotPlayer\PotPlayerMini64.exe "%OSFilePath%\%NoExtensionStr%\%MediaStreamName%" "%OSFilePath%/%newSrtFile%"
 		else if (opts = "--vlc")
-			Run, C:\Program Files\VideoLAN\VLC\vlc.exe "%OSFilePath%\%NoExtensionStr%\%MediaStreamName%"
+			Run, C:\Program Files\VideoLAN\VLC\vlc.exe "%OSFilePath%\%NoExtensionStr%\%MediaStreamName%" "%OSFilePath%/%newSrtFile%"
 
 	}
 
