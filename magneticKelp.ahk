@@ -1238,10 +1238,18 @@ global
 ;		Fix?: use root of that directlry, and add to potplayer/vlc manually using hotkeys?
 ;			Issue with fix: sometimes browsing of file is required
 ;		Fix2:	run the app with subtitle parameters (cmd)
+	
+	;	Find file pattern
+
+	;F - include Files, R - go into subfolders.
+	; Loop, "Files", 
+	; Var = A_LoopFileName (no path)
+	; A_LoopFileFullPath
+
 		if(opts="--potplayer")
-			Run, C:\Program Files\DAUM\PotPlayer\PotPlayerMini64.exe "%OSFilePath%\%NoExtensionStr%\%MediaStreamName%" "%OSFilePath%/%newSrtFile%"
+			Run, C:\Program Files\DAUM\PotPlayer\PotPlayerMini64.exe "%OSFilePath%\%MediaStreamName%" "%OSFilePath%/%newSrtFile%"
 		else if (opts = "--vlc")
-			Run, C:\Program Files\VideoLAN\VLC\vlc.exe "%OSFilePath%\%NoExtensionStr%\%MediaStreamName%" "%OSFilePath%/%newSrtFile%"
+			Run, C:\Program Files\VideoLAN\VLC\vlc.exe "%OSFilePath%\%MediaStreamName%" "%OSFilePath%/%newSrtFile%"
 
 	}
 
