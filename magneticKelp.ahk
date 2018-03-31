@@ -20,6 +20,8 @@ LOCATION_UTORRENT=%A_AppData%\uTorrent\uTorrent.exe
 LOCATION_DELUGE=C:\Program Files (x86)\Deluge\deluge.exe
 LOCATION_BITTORRENT=%A_Appdata%\BitTorrent\BitTorrent.exe
 
+peerflixUrl=%A_Appdata%\npm\node_modules\peerflix
+PeerflixNotFound=0
 ;________________________SubTitles
 MediaStreamName:="WwW.SeeHD.PL_Black Panther 2018 NEW PROPER HD-TS X264-CPG.mkv"
 OSTitle:="",OSSeason:="",OSEpisode:="",OSIMDBID:="",OSUserAgent:="",OSSubtitleID="",OSToken="",OSTags="",OSFilePath=""
@@ -70,7 +72,7 @@ makeMainWindow(){
 	global
 
 	Gui 1:-MinimizeBox -MaximizeBox +AlwaysOnTop
-	Gui 1:Add, Button, Default gStreamButton x40 y56 w89 h23, Stream
+	Gui 1:Add, Button, Default hWndButton1 gStreamButton x40 y56 w89 h23, Stream
 	Gui 1:Add, DropDownList, hWndlistStream vStreamWith x88 y24 w68 +Sort Lowercase, potplayer|vlc||airplay|mplayer|smplayer|mpv|omx|webplay
 	Gui 1:Add, GroupBox, x8 y2 w153 h88, Stream
 	Gui 1:Add, CheckBox, vListPeerflix x16 y24 w68 h23, List files
@@ -260,12 +262,13 @@ betaFeatureDisable(){
 	Global
 	GuiControl,Disable, Button8
 	;verify that NPM and peerflix is installed
-	url=%A_Appdata%\npm\node_modules\peerflix
+	;url=%A_Appdata%\npm\node_modules\peerflix
 	;msgbox %url%
-	if(!FileExist(url)){
-		IniRead,isStreamCheck,%IniLocation%,def ults,streamInstalledCheck
-		if(%isStreamCheck%){
+	if(!FileExist(peerflixUrl)){
+		IniRead,isStreamCheck,%IniLocation%,Defaults,streamInstalledCheck
+		if(isStreamCheck){
 	 		GuiControl,Disable, Button1
+			PeerflixNotFound=true
 		}
 	}
 	
@@ -330,21 +333,31 @@ CheckHover:
 		 ;    	return
 			; }
 			if(controlID=Button8){
-				ControlGetPos,varX,varY,varWidth,varHeight,Button7,MagneticKelp,,,
+				ControlGetPos,varX,varY,varWidth,varHeight,Button8,MagneticKelp,,,
 				varX+=varWidth	; change the location of the tooltip X value to be 
 				varY+=varHeight	;to the right of the win
 
-		    	ToolTip, Popcorntime, %varX%, %varY%
+		    	ToolTip,Stream with Popcorntime, %varX%, %varY%
 		    	return
 			}
 			if(controlID=BtnStreamCustom){
 				;ControlGetPos,varX,varY,varWidth,varHeight,BtnStreamCustom,Stream,,,
-				ControlGetPos,varX,varY,varWidth,varHeight,Button6,MagneticKelp,,,
+				ControlGetPos,varX,varY,varWidth,varHeight,Button7,MagneticKelp,,,
 				VarX+=varWidth
 				;varY+=varHeight	;to the right of the win
-
-				ToolTip, Custom peerflix, %varX%, %varY%
+;
+				ToolTip,Use custom peerflix arguments, %varX%, %varY%
 				return
+			}
+			if(controlID=Button1){
+				;msgbox hello
+				if(PeerflixNotFound){
+					ControlGetPos,varX,varY,varWidth,varHeight,Button1,MagneticKelp,,,
+					VarX+=varWidth
+					varY+=varHeight	;to the right of the win
+					ToolTip,Peerflix not installed. Check help on how to install it, %varX%, %varY%
+					return
+				}
 			}
 		}
 	}
