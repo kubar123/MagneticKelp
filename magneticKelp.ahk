@@ -30,6 +30,7 @@ Opts=""
 ;==============================================	/END GLOBAL ==============================
 
 ;---------------------------------- 	MAIN 	-------------------
+
 ;testSubs()
 makeMainWindow()
 ;checkForNewVersions()
@@ -77,7 +78,7 @@ makeMainWindow(){
 	Gui 1:Add, GroupBox, x8 y2 w153 h88, Stream
 	Gui 1:Add, CheckBox, vListPeerflix x16 y24 w68 h23, List files
 	Gui 1:Font, s15
-	Gui 1:Add, Button, gBtnReloadTorrent x292 y2 w25 h25, ⏮️
+	Gui 1:Add, Button, hWndButton4 gBtnReloadTorrent x292 y2 w25 h25, ⏮️
 	Gui 1:Font
 	Gui 1:Add, GroupBox, x168 y2 w121 h88, Download
 	Gui 1:Add, Button, gbtnDownload x192 y56 w80 h23, Download
@@ -359,6 +360,19 @@ CheckHover:
 					return
 				}
 			}
+
+			if(controlID=Button4){
+				;msgbox hello
+				if(!IsTorrentHistoryEnabled){
+					ControlGetPos,varX,varY,varWidth,varHeight,Button4,MagneticKelp,,,
+					VarX+=varWidth
+					varY+=varHeight	;to the right of the win
+					ToolTip,Torrent history is disabled. Enable in the settings, %varX%, %varY%
+					return
+				}
+			}
+
+
 		}
 	}
 ;---------- end of check, display no tooltip
