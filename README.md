@@ -6,7 +6,7 @@ __*__ Your antivirus might quarantine the application
 * Edit -> Preferences -> Associate magnet/torrent links
 
 ## Streaming torrents
-* Required for streaming torrents
+*Required for streaming torrents
 More information: https://github.com/mafintosh/peerflix
 1.  Install Node.js: https://nodejs.org/en/
 2.  Install Peerflix - in a command window enter:
