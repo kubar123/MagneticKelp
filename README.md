@@ -6,7 +6,7 @@ __*__ Your antivirus might quarantine the application
 * Edit -> Preferences -> Associate magnet/torrent links
 
 ## Streaming torrents
-
+* Required for streaming torrents
 More information: https://github.com/mafintosh/peerflix
 1.  Install Node.js: https://nodejs.org/en/
 2.  Install Peerflix - in a command window enter:
@@ -88,4 +88,4 @@ A. Peerflix was not found, see instructions above to install the streaming compo
 A. Try deleting the install directory noted above, and downloading the latest release from above.
 
 *Q. The timeout/exit stream on end of player options dont work
-A. The main window must be open and streaming the content when the timeout reaches 0. Do not end the media player before the timeout has ended, it only hooks into the player once.
+A. The main window must be open and streaming the content when the timeout reaches 0. Do not end the media player before the timeout has ended, it only attempts to hook into the player once.
