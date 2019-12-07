@@ -1257,7 +1257,6 @@ global
 		newSrtFile=%noExtensionStr%.srt
 		;msgbox %newSrtFile%
 		;msgbox %OSFilePath%
-		FileAppend, %result%, %OSFilePath%/%newSrtFile%
 
 ;===== ISSUE CRITICAL BUG =====
 ; 				FILE NOT ALWAYS IN %OSfILEpATH%\%NoExtensionStr% --
@@ -1272,11 +1271,30 @@ global
 	; Loop, "Files", 
 	; Var = A_LoopFileName (no path)
 	; A_LoopFileFullPath
+	fileLocation=""
+	fileDirLocation=""
+	b_index=0
+Loop, Files, %OSFilePath%\`*,R
+	{	
+		if(A_LoopFileName=MediaStreamName){
+			fileLocation=%A_LoopFileFullPath%
+			fileDirLocation=%A_LoopFileDir%
+			msgbox %A_LoopFileName%
+		}
 
-		if(opts="--potplayer")
-			Run, C:\Program Files\DAUM\PotPlayer\PotPlayerMini64.exe "%OSFilePath%\%MediaStreamName%" "%OSFilePath%/%newSrtFile%"
-		else if (opts = "--vlc")
-			Run, C:\Program Files\VideoLAN\VLC\vlc.exe "%OSFilePath%\%MediaStreamName%" "%OSFilePath%/%newSrtFile%"
+		b_index++
+	}
+		FileAppend, %result%, %fileDirLocation%/%newSrtFile%
+		sleep 250
+		;msgbox % b_index . " files found"
+		SrtLocation=%OSFilePath%/%newSrtFile%
+
+		Run,"C:\Program Files\DAUM\PotPlayer\PotPlayerMini64.exe" "http://localhost:8888/" "C:\Users\Admin\AppData\Local\Temp\torrent-stream\532369fa74efb335613fe244252467dd328d49b6\Jumanji.Welcome.To.The.Jungle.2017.720p.BluRay.x264-[YTS.AM].srt"
+
+		;if(opts="--potplayer")
+		;	Run, C:\Program Files\DAUM\PotPlayer\PotPlayerMini64.exe "%OSFilePath%\%MediaStreamName%" "%OSFilePath%/%newSrtFile%"
+		;else if (opts = "--vlc")
+		;	Run, C:\Program Files\VideoLAN\VLC\vlc.exe "%OSFilePath%\%MediaStreamName%" "%OSFilePath%/%newSrtFile%"
 
 	}
 
