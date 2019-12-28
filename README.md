@@ -1,3 +1,8 @@
+<a href="https://github.com/kubar123/MagneticKelp/releases/latest"/><img src="https://img.shields.io/github/v/release/kubar123/magneticKelp?style=flat-square" /> <a href="https://github.com/kubar123/MagneticKelp/releases/latest/download/magneticKelp.exe"/> <img src="https://img.shields.io/github/downloads/kubar123/magneticKelp/latest/total?style=flat-square" />
+
+
+
+
 ## [**Download** latest .exe version](https://github.com/kubar123/MagneticKelp/releases/latest)
 __*__ Under 'assets' click the 'magneticKelp.exe' link  
 __*__ Your antivirus might quarantine the application
